@@ -1,0 +1,20 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans "로그인" %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <form method="post">
+        <h1>{% trans "로그인" %}</h1>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{% trans "로그인" %}</button>
+    </form>
+</body>
+</html>
+
+
