@@ -9,16 +9,15 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-# settings.py
-
 import os
 from pathlib import Path
+import my_settings  # 추가
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Add your generated SECRET_KEY here
-SECRET_KEY = 'e6bqewksa+l0-j(ktdn4@ubd%px)2xju@mcofmud&plzb$$mb('
+SECRET_KEY = my_settings.SECRET['secret']  # 수정
+
+DATABASES = my_settings.DATABASES  # 수정
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,16 +26,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users',  # Add your users app
-    'Everytimeapp',  # Corrected your everytimeapp
+    'corsheaders',
+    'Everytimeapp',
+    'users',
+    'rest_framework',
+    'accounts',
 ]
+
+AUTH_USER_MODEL = 'users.Account'  # 올바른 설정 유지
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # 반드시 포함
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -61,13 +65,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Everytime.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -83,18 +80,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# settings.py
-
-import os
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
 ]
 
-LANGUAGE_CODE = 'ko-kr'  # 기본 언어를 한국어로 설정
-TIME_ZONE = 'Asia/Seoul'  # 서울 시간대 설정
+LANGUAGE_CODE = 'ko-kr'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 USE_L10N = True
@@ -113,9 +104,33 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.CustomUser'
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.219.101']
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.219.101']  # 필요한 도메인 추가
-
-# 개발 중이라면 DEBUG를 True로 설정하세요.
 DEBUG = True
+
+# CORS 설정
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+APPEND_SLASH = False
+
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+)
+
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+)
+

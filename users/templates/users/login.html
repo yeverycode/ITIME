@@ -1,20 +1,19 @@
-{% load i18n %}
+<!-- Everytime/users/templates/users/login.html -->
+
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>{% trans "로그인" %}</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <title>Login</title>
 </head>
 <body>
+    <h2>Login</h2>
     <form method="post">
-        <h1>{% trans "로그인" %}</h1>
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">{% trans "로그인" %}</button>
+        <button type="submit">Login</button>
     </form>
 </body>
 </html>
+
 
 

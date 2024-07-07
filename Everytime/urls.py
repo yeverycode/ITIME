@@ -16,11 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from Everytimeapp.views import SignUpView, index, category_list  # import 시 SignUpView 추가
+from django.contrib import admin
+from django.urls import path, include
+from Everytimeapp.views import SignUpView, index, category_list
 
 urlpatterns = [
+    path('signup/', SignUpView.as_view(), name='signup'),
+    path('index/', index, name='index'),
+    path('category/', category_list, name='category_list'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('accounts.urls')),
     path('users/', include('users.urls')),
-    path('categories/', include('Everytimeapp.urls')),  # Everytimeapp의 URL 패턴 포함
-    path('', include('Everytimeapp.urls')),  # 메인 앱 URL 포함
+    path('api/', include('Everytimeapp.urls')),
+    path('', index, name='home'),
+    path('categories/', category_list, name='category_list'),
+    path('users/signup_api/', SignUpView.as_view(), name='signup_api'),
 ]
-

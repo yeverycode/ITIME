@@ -1,3 +1,4 @@
+<!-- templates/users/signup.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -7,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <form method="post">
+    <form method="post" action="/users/signup/">
         <h1>회원가입</h1>
         {% csrf_token %}
         {{ form.as_p }}
