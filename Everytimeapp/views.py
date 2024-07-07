@@ -1,22 +1,16 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
 from django.views import View
-from django.http import JsonResponse
-
-from django.shortcuts import render
-from .models import Category, Post
+from .models import Category
 from rest_framework import viewsets
-from .forms import CustomUserCreationForm, LoginForm
 from .models import Account, Board, Post
 from .serializers import BoardSerializer, PostSerializer
 import json
 import bcrypt
 import re
 from django.db.models import Q
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
 from django.http import JsonResponse
 from .forms import CustomUserCreationForm, LoginForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import AuthenticationForm
 
 MINIMUM_PASSWORD_LENGTH = 8  # 비밀번호 최소 길이 설정
 
@@ -77,22 +71,26 @@ def validate_phone(phone):
         return JsonResponse({'message': 'INVALID_PHONE_NUMBER'}, status=400)
 
 # 로그인 뷰 (폼 기반)
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
 def login_view(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('index')  # 로그인 성공 시 리디렉션할 URL
             else:
-                return render(request, 'users/login.html', {'error': '로그인 실패', 'form': form})
+                return render(request, 'users/login.html', {'form': form, 'error': 'Wrong Credentials'})
+        else:
+            return render(request, 'users/login.html', {'form': form, 'error': 'Wrong Credentials'})
     else:
-        form = LoginForm()
+        form = AuthenticationForm()
     return render(request, 'users/login.html', {'form': form})
-
 # 사용자 프로필 뷰
 def user_profile_view(request):
     # 여기에 프로필 관련 로직 추가
@@ -173,6 +171,39 @@ class SignUpView(View):
 
         except KeyError:
             return JsonResponse({"message": "KEY_ERROR"}, status=400)
+
+
+
+import logging
+from django.contrib.auth import authenticate, login
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework import status
+
+logger = logging.getLogger(__name__)
+
+class LoginAPIView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        if username is None or password is None:
+            return Response({"error": "Please provide both username and password"}, status=status.HTTP_400_BAD_REQUEST)
+
+        logger.debug(f"Authenticating user: {username}")
+
+        user = authenticate(username=username, password=password)
+        if user:
+            login(request, user)
+            token, created = Token.objects.get_or_create(user=user)
+            logger.debug(f"User authenticated, token: {token.key}")
+            return Response({"token": token.key})
+        else:
+            logger.debug("Authentication failed")
+            return Response({"error": "Wrong Credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 # Board ViewSet
 class CustomBoardViewSet(viewsets.ModelViewSet):

@@ -32,4 +32,5 @@ urlpatterns = [
     path('', index, name='home'),
     path('categories/', category_list, name='category_list'),
     path('users/signup_api/', SignUpView.as_view(), name='signup_api'),
+
 ]

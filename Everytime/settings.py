@@ -16,7 +16,7 @@ import my_settings  # 추가
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = my_settings.SECRET['secret']  # 수정
-
+CSRF_COOKIE_SECURE = False
 DATABASES = my_settings.DATABASES  # 수정
 
 INSTALLED_APPS = [
@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'Everytimeapp',
     'users',
     'rest_framework',
+    'rest_framework.authtoken',
     'accounts',
 ]
 
@@ -63,6 +64,10 @@ TEMPLATES = [
     },
 ]
 
+LOGIN_REDIRECT_URL = '/'  # 로그인 후 리디렉션할 URL
+
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000']
+
 WSGI_APPLICATION = 'Everytime.wsgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -79,6 +84,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ],
+}
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
