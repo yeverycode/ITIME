@@ -164,6 +164,7 @@
     </style>
 </head>
 <body>
+    {% load static %}
     <header>
         <div>
             <img src="https://i.imgur.com/gCaZS0X.png" alt="로고">
@@ -182,10 +183,10 @@
     </nav>
     <section>
         <div class="profile">
-            <img src="https://via.placeholder.com/100" alt="프로필 이미지">
-            <p class="nickname">닉네임</p>
-            <p class="realname">본명</p>
-            <p class="userid">아이디</p>
+            <img src="https://cf-fpi.everytime.kr/0.png" alt="프로필 이미지">
+            <p class="nickname">{{ nickname }}</p>
+            <p class="realname">{{ realname }}</p>
+            <p class="userid">{{ userid }}</p>
             <div class="button-container">
                 <button id="profile-button" class="profile-button">내 정보</button>
                 <button id="logout-button" class="profile-button">로그아웃</button>
@@ -196,36 +197,95 @@
             <div class="nav-item">댓글 단 글</div>
             <div class="nav-item">내 스크랩</div>
         </div>
-
     </section>
     <footer>
         <p>&copy; COSMOS (COding Study MOimS)</p>
     </footer>
 
-    <script>
-        // JavaScript로 강의실과 책방 링크 클릭 시 active 클래스를 추가하여 스타일을 변경
+     <script>
+        // 강의실과 책방 링크 클릭 시 active 클래스를 추가하여 스타일 변경
         const links = document.querySelectorAll('nav a');
 
         links.forEach(link => {
             link.addEventListener('click', function() {
-                // 현재 active 클래스를 가진 요소들의 active 클래스 제거
                 document.querySelectorAll('nav a.active').forEach(item => {
                     item.classList.remove('active');
                 });
-
-                // 클릭된 링크에 active 클래스 추가
                 this.classList.add('active');
             });
         });
 
         // "내 정보" 버튼 클릭 시 이동
         document.getElementById('profile-button').addEventListener('click', function() {
-            window.location.href = '/user/profile/';  // '/user/profile' 경로로 이동
+            console.log('내 정보 버튼이 클릭되었습니다.');
+            window.location.href = '/user/profile/';
         });
 
         // "로그아웃" 버튼 클릭 시 이동
         document.getElementById('logout-button').addEventListener('click', function() {
-            window.location.href = '/user/logout/';  // '/user/logout' 경로로 이동
+            console.log('로그아웃 버튼이 클릭되었습니다.');
+            window.location.href = '/user/logout/';
+        });
+
+        // CSRF 토큰 가져오기
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        // 회원가입 버튼 클릭 시 AJAX 요청
+        $('#join_button').click(function () {
+            let name = $('#input_name').val();
+            let student_id = $('#input_student_id').val();
+            let nickname = $('#input_nickname').val();
+            let password = $('#input_password').val();
+            let email = $('#input_email').val();
+            let phone = $('#input_phone').val();
+
+            console.log(name, student_id, nickname, password, email, phone);
+
+            $.ajax({
+                url: "/user/join/",
+                data: JSON.stringify({
+                    name: name,
+                    student_id: student_id,
+                    nickname: nickname,
+                    password: password,
+                    email: email,
+                    phone: phone
+                }),
+                method: "POST",
+                contentType: "application/json",
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                success: function (data) {
+                    console.log("성공");
+                    alert("회원가입 성공했습니다. 로그인해주세요.");
+                    location.replace('/main/');
+                },
+                error: function (request, status, error) {
+                    console.log("에러");
+                    console.log(request, status, error);
+                    let errorMessage = request.responseJSON.error;
+                    $('#error-message').text(errorMessage).show();
+                },
+                complete: function () {
+                    console.log("완료");
+                }
+            });
         });
     </script>
 </body>

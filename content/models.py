@@ -37,3 +37,15 @@ class Bookmark(models.Model):
 
     def __str__(self):
         return f"{self.email} bookmarked {self.feed}"
+
+# content/models.py
+from django.conf import settings
+from django.db import models
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='content_profile')
+    profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
+    student_id = models.CharField(max_length=20)
+    phone = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.user.nickname

@@ -1,12 +1,11 @@
 from django.urls import path
-from .views import Join, Login, LogOut, UploadProfile, ProfileView, BoardView, BoardWriteView
+from .views import Join, Login, LogOut, UploadProfile, ProfileView, ProfileUpdateView
 
 urlpatterns = [
-    path('join/', Join.as_view(), name='join'),  # 슬래시 추가
-    path('login/', Login.as_view(), name='login'),  # 슬래시 추가
+    path('join/', Join.as_view(), name='join'),
+    path('login/', Login.as_view(), name='login'),
     path('logout/', LogOut.as_view(), name='logout'),
-    path('profile/upload/', UploadProfile.as_view(), name='upload_profile'),  # 슬래시 추가
+    path('upload_profile/', UploadProfile.as_view(), name='upload_profile'),
     path('profile/', ProfileView.as_view(), name='profile'),
-    path('board/', BoardView.as_view(), name='board'),
-    path('board/write/', BoardWriteView.as_view(), name='board_write'),
+    path('profile/update/', ProfileUpdateView.as_view(), name='profile_update'),
 ]

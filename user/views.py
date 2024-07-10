@@ -1,73 +1,78 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login, logout
-from django.views import View
-from django.http import JsonResponse
-from .models import User
+from uuid import uuid4
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
-from uuid import uuid4
-import os
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
-from techtime.models import Post  # 변경된 부분
-from .forms import PostForm
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 import json
-from rest_framework.views import APIView
-from rest_framework.response import Response
+import os
+from django.http import JsonResponse
+from .models import User, Profile
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views import View
+from .forms import ProfileUpdateForm
+import logging
 
+logger = logging.getLogger(__name__)
 
-class Join(APIView):
+class Join(View):
     def get(self, request):
         return render(request, "user/join.html")
 
     def post(self, request):
         try:
             data = json.loads(request.body)
-        except json.JSONDecodeError:
-            return Response(status=400, data=dict(message="Invalid JSON"))
+            name = data.get('name')
+            student_id = data.get('student_id')
+            nickname = data.get('nickname')
+            password = data.get('password')
+            email = data.get('email')
+            phone = data.get('phone')
 
-        name = data.get('name')
-        student_id = data.get('student_id')
-        nickname = data.get('nickname')
-        password = data.get('password')
-        email = data.get('email')
-        phone = data.get('phone')
+            if User.objects.filter(student_id=student_id).exists():
+                return JsonResponse({'error': 'Student ID already exists'}, status=400)
 
-        User.objects.create(
-            name=name,
-            student_id=student_id,
-            nickname=nickname,
-            password=make_password(password),
-            email=email,
-            phone=phone,
-            profile_image="default_profile.png"
-        )
+            user = User.objects.create(
+                name=name,
+                student_id=student_id,
+                nickname=nickname,
+                password=make_password(password),
+                email=email,
+                phone=phone,
+                profile_image="default_profile.png"
+            )
 
-        return Response(status=200)
+            Profile.objects.create(user=user)
 
+            return JsonResponse({'message': '회원가입 성공'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
 
 class Login(View):
     def get(self, request):
-        return render(request, "user/login.html")
+        next_url = request.GET.get('next', 'profile')
+        return render(request, "user/login.html", {'next': next_url})
 
     def post(self, request):
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        data = json.loads(request.body)
+        email = data.get('email')
+        password = data.get('password')
+        next_url = data.get('next', 'profile')
 
         user = authenticate(request, email=email, password=password)
 
         if user is not None:
             auth_login(request, user)
-            return redirect('profile')  # 로그인 성공 시 프로필 페이지로 리디렉션
+            return JsonResponse({'redirect': next_url})
         else:
-            return render(request, "user/login.html", {'error': 'Invalid credentials'})
-
+            return JsonResponse({'error': 'Invalid credentials'}, status=400)
 
 class LogOut(View):
     def get(self, request):
-        logout(request)
-        return redirect('/main/')  # 로그아웃 후 메인 페이지로 리디렉션
-
+        auth_logout(request)
+        return redirect('/main/')
 
 class UploadProfile(APIView):
     def post(self, request):
@@ -91,24 +96,40 @@ class UploadProfile(APIView):
 
         return Response(status=200)
 
-
 @method_decorator(login_required, name='dispatch')
 class ProfileView(View):
     def get(self, request):
-        user = request.user  # 현재 로그인한 사용자
-        return render(request, 'user/profile.html', {'user': user})
+        user_profile = request.user.profile
+        context = {
+            'profile_image_url': user_profile.profile_image.url if user_profile.profile_image else None,
+            'nickname': user_profile.nickname,
+            'realname': request.user.name,
+            'email': request.user.email,
+            'student_id': request.user.student_id,
+            'phone': request.user.phone,
+            'additional_info': user_profile.additional_info,
+        }
+        return render(request, 'user/profile.html', context)
 
-
-class BoardView(View):
+@method_decorator(login_required, name='dispatch')
+class ProfileUpdateView(View):
     def get(self, request):
-        posts = Post.objects.all()
-        return render(request, 'techtime/board.html', {'posts': posts})
+        user_profile = request.user.profile
+        form = ProfileUpdateForm(instance=user_profile)
+        return render(request, 'user/profile_update.html', {'form': form})
 
-
-class BoardWriteView(View):
     def post(self, request):
-        form = PostForm(request.POST)
+        logger.debug('Received POST request')
+        logger.debug(request.POST)
+        logger.debug(request.FILES)
+
+        user_profile = request.user.profile
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
             form.save()
-            return JsonResponse({'message': '성공'}, status=200)
-        return JsonResponse({'message': '에러', 'errors': form.errors}, status=400)
+            return JsonResponse({'success': True})
+
+        else:
+            logger.error('Form is not valid')
+            logger.error(form.errors)
+            return JsonResponse({'success': False, 'errors': form.errors})

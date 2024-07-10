@@ -9,15 +9,20 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: 100%">
         <div style="padding: 20px; text-align: center; border: solid 1px rgba(219, 219, 219, 1); width: 300px; height: 400px; margin-top: 30px; background: white">
             <div style="padding-bottom: 10px">
-                <img style="width: 150px" src="{{ user.profile_image.url }}" alt="Profile Image">
+                <img style="width: 150px" src="{{ profile_image_url }}" alt="Profile Image">
             </div>
-            <div style="font-weight: bold; color: gray; padding-bottom: 20px">{{ user.name }}</div>
-            <div>{{ user.nickname }}</div>
-            <div>{{ user.email }}</div>
-            <div>{{ user.student_id }}</div>
-            <div>{{ user.phone }}</div>
+            <div style="font-weight: bold; color: gray; padding-bottom: 20px">{{ realname }}</div>
+            <div>{{ nickname }}</div>
+            <div>{{ email }}</div>
+            <div>{{ student_id }}</div>
+            <div>{{ phone }}</div>
+            <div>{{ additional_info }}</div>
+            <div style="margin-top: 20px;">
+                <a href="{% url 'profile_update' %}" class="btn btn-primary">프로필 수정</a>
+            </div>
         </div>
     </div>
 </body>
 </html>
+
 

@@ -1,5 +1,8 @@
-from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+# user/models.py
+from django.conf import settings
 from django.db import models
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 
 class UserManager(BaseUserManager):
     def create_user(self, email, nickname, password=None, **extra_fields):
@@ -22,29 +25,33 @@ class UserManager(BaseUserManager):
 
         return self.create_user(email, nickname, password, **extra_fields)
 
-class User(AbstractBaseUser):
-    """
-        유저 프로파일 사진
-        유저 닉네임     -> 화면에 표기되는 이름
-        유저 이름       -> 실제 사용자 이름
-        유저 이메일주소 -> 회원가입할때 사용하는 아이디
-        유저 학번 -> 실제 학번
-        유저 비밀번호 -> 디폴트 값
-        익명 여부 -> 사용자가 익명으로 활동할지 여부
-    """
-    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)  # 프로필 이미지
+class User(AbstractBaseUser, PermissionsMixin):
+    profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True, default='profile_images/default_profile.png')
     nickname = models.CharField(max_length=24, unique=True)
     name = models.CharField(max_length=24)
     email = models.EmailField(unique=True)
-    student_id = models.CharField(max_length=10, unique=True)  # 학번 추가
-    phone = models.CharField(max_length=15)  # 전화번호 추가
-    is_anonymous_user = models.BooleanField(default=False)  # 익명 여부 추가
+    student_id = models.CharField(max_length=10, unique=True)
+    phone = models.CharField(max_length=15)
+    is_anonymous_user = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'nickname'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['nickname', 'name']
 
     objects = UserManager()
 
     class Meta:
         db_table = "User"
 
+    def __str__(self):
+        return self.nickname
+
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True, default='profile_images/default_profile.png')
+    nickname = models.CharField(max_length=100, null=True, blank=True)
+    additional_info = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.nickname or self.user.nickname
