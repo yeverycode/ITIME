@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+<p>작성일: {{ post.created_at }}</p>
+<p>수정일: {{ post.updated_at }}</p>
+<a href="{% url 'board' %}">목록으로 돌아가기</a>
+{% endblock %}

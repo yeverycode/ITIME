@@ -1,3 +1,5 @@
+<!-- templates/user/profile_update.html -->
+
 <!doctype html>
 <html lang="ko">
 <head>
@@ -8,7 +10,7 @@
 <body>
 <div class="container">
     <h2>프로필 업데이트</h2>
-    <form method="post" enctype="multipart/form-data" id="profile-update-form">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             <label for="id_profile_image" class="form-label">프로필 사진</label>
@@ -18,36 +20,17 @@
             <label for="id_nickname" class="form-label">닉네임</label>
             {{ form.nickname }}
         </div>
+        <div class="mb-3">
+            <label for="id_phone" class="form-label">전화번호</label>
+            {{ form.phone }}
+        </div>
         <button type="submit" class="btn btn-primary">업데이트</button>
     </form>
+    {% if last_login_korea %}
+        <p>마지막 로그인: {{ last_login_korea }}</p>
+    {% else %}
+        <p>마지막 로그인 정보가 없습니다.</p>
+    {% endif %}
 </div>
-<script>
-    document.getElementById('profile-update-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-
-        fetch('{% url "profile_update" %}', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('프로필이 성공적으로 업데이트되었습니다.');
-                window.location.href = '/main/';
-            } else {
-                alert('프로필 업데이트에 실패했습니다.');
-                console.log(data.errors);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('프로필 업데이트 중 오류가 발생했습니다.');
-        });
-    });
-</script>
 </body>
 </html>

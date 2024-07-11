@@ -39,10 +39,16 @@ class Bookmark(models.Model):
     def __str__(self):
         return f"{self.email} bookmarked {self.feed}"
 
+from django.db import models
+from user.models import User  # User 모델을 올바른 경로에서 가져오기
+
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
+    is_anonymous = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='techtime_posts', default=1)
 
     def __str__(self):
         return self.title

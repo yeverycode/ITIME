@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'techtime',  # 생성한 앱
     'user',
     'main',
+    'board',
 ]
 
 MIDDLEWARE = [
@@ -117,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -133,5 +134,3 @@ LOGIN_URL = '/user/login/'  # 추가된 부분
 APPEND_SLASH = True
 
 AUTH_USER_MODEL = 'user.User'
-
-

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자유게시판</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>자유게시판</h1>
+        <div class="mb-3">
+            <button id="write_button" class="btn btn-primary">글쓰기</button>
+        </div>
+        <ul class="list-group">
+            {% for post in posts %}
+                <li class="list-group-item">
+                    <h5>{{ post.title }}</h5>
+                    <small>{{ post.created_at }}</small>
+                    <p>{{ post.content|linebreaksbr }}</p>
+                </li>
+            {% empty %}
+                <li class="list-group-item">게시글이 없습니다.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- 글쓰기 모달 -->
+    <div id="write_modal" class="modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">글쓰기</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="write_form" method="post" action="{% url 'board_write' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="title">제목:</label>
+                            <input type="text" id="title" name="title" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="content">내용:</label>
+                            <textarea id="content" name="content" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="is_anonymous" name="is_anonymous">
+                            <label class="form-check-label" for="is_anonymous">익명</label>
+                        </div>
+                        <button type="button" id="submit_button" class="btn btn-success">저장</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 모달 열기
+            $('#write_button').click(function() {
+                $('#write_modal').css('display', 'flex');
+                $(document.body).css('overflow', 'hidden');
+            });
+
+            // 모달 닫기
+            $('.close').click(function() {
+                $('#write_modal').css('display', 'none');
+                $(document.body).css('overflow', 'auto');
+            });
+
+            // 글 저장하기
+            $('#submit_button').click(function() {
+                let title = $('#title').val();
+                let content = $('#content').val();
+                let is_anonymous = $('#is_anonymous').is(':checked');
+                let csrf_token = $('[name="csrfmiddlewaretoken"]').val();
+
+                $.ajax({
+                    url: "{% url 'board_write' %}",
+                    data: {
+                        'title': title,
+                        'content': content,
+                        'is_anonymous': is_anonymous,
+                        'csrfmiddlewaretoken': csrf_token
+                    },
+                    method: "POST",
+                    success: function(data) {
+                        console.log("성공");
+                        alert("글이 저장되었습니다.");
+                        location.replace("{% url 'board' %}");
+                    },
+                    error: function(request, status, error) {
+                        console.log("에러");
+                        let errors = request.responseJSON.errors;
+                        for (let field in errors) {
+                            alert(errors[field]);
+                        }
+                    },
+                    complete: function() {
+                        console.log("완료");
+                        $('#write_modal').css('display', 'none');
+                        $(document.body).css('overflow', 'auto');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

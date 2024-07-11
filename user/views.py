@@ -8,14 +8,13 @@ import json
 import os
 from django.http import JsonResponse
 from .models import User, Profile
+from techtime.models import Post
+from techtime.forms import PostForm, ProfileUpdateForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views import View
-from .forms import ProfileUpdateForm
-import logging
-
-logger = logging.getLogger(__name__)
+from config.utils import convert_to_korea_time
 
 class Join(View):
     def get(self, request):
@@ -31,20 +30,23 @@ class Join(View):
             email = data.get('email')
             phone = data.get('phone')
 
+            # 중복된 student_id 확인
             if User.objects.filter(student_id=student_id).exists():
                 return JsonResponse({'error': 'Student ID already exists'}, status=400)
 
             user = User.objects.create(
                 name=name,
                 student_id=student_id,
-                nickname=nickname,
                 password=make_password(password),
-                email=email,
-                phone=phone,
-                profile_image="default_profile.png"
+                email=email
             )
 
-            Profile.objects.create(user=user)
+            Profile.objects.create(
+                user=user,
+                nickname=nickname,
+                phone=phone,
+                profile_image="profile_images/default_profile.png"
+            )
 
             return JsonResponse({'message': '회원가입 성공'}, status=200)
         except Exception as e:
@@ -52,27 +54,27 @@ class Join(View):
 
 class Login(View):
     def get(self, request):
-        next_url = request.GET.get('next', 'profile')
+        next_url = request.GET.get('next', 'profile')  # GET 요청에서 next 매개변수를 가져옵니다.
         return render(request, "user/login.html", {'next': next_url})
 
     def post(self, request):
         data = json.loads(request.body)
         email = data.get('email')
         password = data.get('password')
-        next_url = data.get('next', 'profile')
+        next_url = data.get('next', 'profile')  # POST 요청에서 next 매개변수를 가져옵니다.
 
         user = authenticate(request, email=email, password=password)
 
         if user is not None:
             auth_login(request, user)
-            return JsonResponse({'redirect': next_url})
+            return JsonResponse({'redirect': next_url})  # 로그인 후 next_url로 리디렉션
         else:
             return JsonResponse({'error': 'Invalid credentials'}, status=400)
 
 class LogOut(View):
     def get(self, request):
         auth_logout(request)
-        return redirect('/main/')
+        return redirect('/main/')  # 로그아웃 후 메인 페이지로 리디렉션
 
 class UploadProfile(APIView):
     def post(self, request):
@@ -91,45 +93,57 @@ class UploadProfile(APIView):
         user = User.objects.filter(email=email).first()
 
         if user:
-            user.profile_image = profile_image
-            user.save()
+            user.profile.profile_image = profile_image
+            user.profile.save()
 
         return Response(status=200)
+
+class BoardView(View):
+    def get(self, request):
+        posts = Post.objects.all()
+        return render(request, 'techtime/board.html', {'posts': posts})
+
+class BoardWriteView(View):
+    def post(self, request):
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user  # 작성자를 현재 사용자로 설정
+            post.save()
+            return JsonResponse({'message': '성공'}, status=200)
+        return JsonResponse({'message': '에러', 'errors': form.errors}, status=400)
 
 @method_decorator(login_required, name='dispatch')
 class ProfileView(View):
     def get(self, request):
-        user_profile = request.user.profile
+        user = request.user
         context = {
-            'profile_image_url': user_profile.profile_image.url if user_profile.profile_image else None,
-            'nickname': user_profile.nickname,
-            'realname': request.user.name,
-            'email': request.user.email,
-            'student_id': request.user.student_id,
-            'phone': request.user.phone,
-            'additional_info': user_profile.additional_info,
+            'profile_image_url': user.profile.profile_image.url if user.profile.profile_image else None,
+            'nickname': user.profile.nickname,
+            'realname': user.name,
+            'email': user.email,
+            'student_id': user.student_id,
+            'phone': user.profile.phone,  # 수정된 부분
         }
         return render(request, 'user/profile.html', context)
 
 @method_decorator(login_required, name='dispatch')
 class ProfileUpdateView(View):
     def get(self, request):
-        user_profile = request.user.profile
-        form = ProfileUpdateForm(instance=user_profile)
+        form = ProfileUpdateForm(instance=request.user.profile)
         return render(request, 'user/profile_update.html', {'form': form})
 
     def post(self, request):
-        logger.debug('Received POST request')
-        logger.debug(request.POST)
-        logger.debug(request.FILES)
-
-        user_profile = request.user.profile
-        form = ProfileUpdateForm(request.POST, request.FILES, instance=user_profile)
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
-            return JsonResponse({'success': True})
+            return redirect('profile')
+        return render(request, 'user/profile_update.html', {'form': form})
 
-        else:
-            logger.error('Form is not valid')
-            logger.error(form.errors)
-            return JsonResponse({'success': False, 'errors': form.errors})
+@login_required
+def profile_image(request):
+    profile = request.user.profile
+    response_data = {
+        'image_url': profile.profile_image.url if profile.profile_image else '/media/default_profile.png'
+    }
+    return JsonResponse(response_data)
