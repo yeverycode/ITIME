@@ -1,8 +1,8 @@
 from django.contrib import admin
+from .models import Post, Lecture, Message, ChatRoom, Board, ArticleComment, Feed, Like, Reply, Bookmark
+from user.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
-from .models import Post  # Post 모델 가져오기
-from user.models import User  # User 모델을 올바른 경로에서 가져오기
 
 class UserAdmin(BaseUserAdmin):
     list_display = ('email', 'login_id', 'username', 'name', 'status', 'is_staff', 'is_superuser')
@@ -22,20 +22,62 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 
-# User 모델을 관리 사이트에 등록하기 전에 이미 등록되어 있는지 확인
 try:
     admin.site.register(User, UserAdmin)
 except admin.sites.AlreadyRegistered:
     pass
 
-# Group 모델을 관리 사이트에서 제거
 try:
     admin.site.unregister(Group)
 except admin.sites.NotRegistered:
     pass
 
-# Post 모델을 관리 사이트에 등록
 try:
     admin.site.register(Post)
+except admin.sites.AlreadyRegistered:
+    pass
+
+try:
+    admin.site.register(Lecture)
+except admin.sites.AlreadyRegistered:
+    pass
+
+try:
+    admin.site.register(ChatRoom)
+except admin.sites.AlreadyRegistered:
+    pass
+
+try:
+    admin.site.register(Message)
+except admin.sites.AlreadyRegistered:
+    pass
+
+try:
+    admin.site.register(Board)
+except admin.sites.AlreadyRegistered:
+    pass
+
+try:
+    admin.site.register(ArticleComment)
+except admin.sites.AlreadyRegistered:
+    pass
+
+try:
+    admin.site.register(Feed)
+except admin.sites.AlreadyRegistered:
+    pass
+
+try:
+    admin.site.register(Like)
+except admin.sites.AlreadyRegistered:
+    pass
+
+try:
+    admin.site.register(Reply)
+except admin.sites.AlreadyRegistered:
+    pass
+
+try:
+    admin.site.register(Bookmark)
 except admin.sites.AlreadyRegistered:
     pass

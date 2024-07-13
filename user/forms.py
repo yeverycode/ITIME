@@ -30,7 +30,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'login_id', 'username', 'name', 'status')
+        fields = ('email', 'login_id', 'username', 'name', 'status', 'phone')  # phone 필드 추가
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")

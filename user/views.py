@@ -35,10 +35,12 @@ class Join(View):
                 return JsonResponse({'error': 'Student ID already exists'}, status=400)
 
             user = User.objects.create(
+                username=email,  # Django 기본 User 모델의 username 필드 사용
                 name=name,
                 student_id=student_id,
                 password=make_password(password),
-                email=email
+                email=email,
+                phone=phone
             )
 
             Profile.objects.create(
@@ -63,7 +65,8 @@ class Login(View):
         password = data.get('password')
         next_url = data.get('next', 'profile')  # POST 요청에서 next 매개변수를 가져옵니다.
 
-        user = authenticate(request, email=email, password=password)
+        # User 모델이 이메일을 사용자명으로 사용하도록 설정되어 있는지 확인
+        user = authenticate(request, username=email, password=password)
 
         if user is not None:
             auth_login(request, user)
@@ -101,7 +104,7 @@ class UploadProfile(APIView):
 class BoardView(View):
     def get(self, request):
         posts = Post.objects.all()
-        return render(request, 'techtime/board.html', {'posts': posts})
+        return render(request, 'techtime/post.html', {'posts': posts})
 
 class BoardWriteView(View):
     def post(self, request):

@@ -1,5 +1,7 @@
 from django.db import models
 from user.models import User  # User 모델을 올바른 경로에서 가져오기
+from django.db import models
+from django.conf import settings
 
 class Feed(models.Model):
     content = models.TextField()  # 글내용
@@ -36,13 +38,32 @@ class Bookmark(models.Model):
     def __str__(self):
         return f"{self.email} bookmarked {self.feed}"
 
+class Board(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+
 class Post(models.Model):
-    title = models.CharField(max_length=200)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
     content = models.TextField()
-    is_anonymous = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='board_posts', default=1)
+    modified_at = models.DateTimeField(auto_now=True)
+    is_anonymous = models.BooleanField(default=False)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
+    bookmarks = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='bookmarked_posts', blank=True)
 
     def __str__(self):
         return self.title
+
+class ArticleComment(models.Model):
+    post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.content

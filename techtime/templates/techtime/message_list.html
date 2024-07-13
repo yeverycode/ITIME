@@ -1,0 +1,38 @@
+<!-- templates/techtime/message_list.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쪽지함</title>
+</head>
+<body>
+    <h1>받은 쪽지</h1>
+    <ul>
+        {% for message in received_messages %}
+            <li>
+                <strong>보낸 사람:</strong> {{ message.sender.username }}<br>
+                <strong>제목:</strong> {{ message.subject }}<br>
+                <strong>내용:</strong> {{ message.body }}<br>
+                <strong>받은 시간:</strong> {{ message.created_at }}
+            </li>
+        {% empty %}
+            <li>받은 쪽지가 없습니다.</li>
+        {% endfor %}
+    </ul>
+
+    <h1>보낸 쪽지</h1>
+    <ul>
+        {% for message in sent_messages %}
+            <li>
+                <strong>받는 사람:</strong> {{ message.receiver.username }}<br>
+                <strong>제목:</strong> {{ message.subject }}<br>
+                <strong>내용:</strong> {{ message.body }}<br>
+                <strong>보낸 시간:</strong> {{ message.created_at }}
+            </li>
+        {% empty %}
+            <li>보낸 쪽지가 없습니다.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

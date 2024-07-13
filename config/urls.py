@@ -21,10 +21,10 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('main/', include('main.urls')),
+    path('main/', include('techtime.urls')),
     path('content/', include('content.urls')),
     path('techtime/', include('techtime.urls')),
-    path('user/', include('user.urls')),  # 'user' 앱의 URL 추가
+    path('user/', include('user.urls')),
     path('board/', include('board.urls')),
 ]
 

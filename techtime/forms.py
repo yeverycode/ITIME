@@ -1,8 +1,7 @@
-# user/forms.py
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from user.models import User, Profile
-from techtime.models import Post  # Post 모델을 올바른 경로에서 가져오기
+from techtime.models import Post, ArticleComment, Message  # Post, ArticleComment, Message 모델을 올바른 경로에서 가져오기
 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -36,9 +35,23 @@ class UserChangeForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['profile_image', 'nickname', 'phone']
+        fields = ['profile_image', 'nickname']
+        widgets = {
+            'profile_image': forms.ClearableFileInput(attrs={'class': 'form-control', 'id': 'id_profile_image'}),
+            'nickname': forms.TextInput(attrs={'class': 'form-control', 'id': 'id_nickname'}),
+        }
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'is_anonymous']
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['chat_room', 'content']
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = ArticleComment
+        exclude = ['post', 'user']
