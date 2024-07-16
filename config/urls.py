@@ -26,6 +26,7 @@ urlpatterns = [
     path('techtime/', include('techtime.urls')),
     path('user/', include('user.urls')),
     path('board/', include('board.urls')),
+    path('lecture/', include('lecture.urls')),
 ]
 
 if settings.DEBUG:

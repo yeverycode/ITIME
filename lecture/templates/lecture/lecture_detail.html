@@ -1,10 +1,9 @@
-<!-- templates/techtime/lectures.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>강의실</title>
+    <title>{{ lecture.course_name }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -54,6 +53,25 @@
         .lecture .rating {
             color: #ffa500;
         }
+        .review {
+            background-color: #2e2e2e;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .add-review {
+            margin-top: 20px;
+        }
+        .add-review a {
+            color: #ffffff;
+            background-color: #ff0000;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .add-review a:hover {
+            background-color: #cc0000;
+        }
     </style>
 </head>
 <body>
@@ -62,19 +80,25 @@
     </header>
     <nav>
         <a href="{% url 'main' %}">메인 페이지</a>
-        <a href="{% url 'lectures' %}" class="active">강의실</a>
-        <a href="{% url 'board' %}">게시판</a>
+        <a href="{% url 'lecture_room' %}">강의실</a>
+        <a href="{% url 'main' %}">게시판</a>
     </nav>
     <div class="container">
-        <h1>강의실</h1>
-        {% for lecture in lectures %}
+        <h1>{{ lecture.course_name }}</h1>
         <div class="lecture">
-            <h3>{{ lecture.name }}</h3>
+            <h3>{{ lecture.course_name }}</h3>
             <p>교수명: {{ lecture.professor }}</p>
-            <p class="rating">평점: {{ lecture.rating }}</p>
-            <p>{{ lecture.review }}</p>
+            <p class="rating">평점: {{ avg_rating|floatformat:1 }}</p>
+            {% for review in reviews %}
+            <div class="review">
+                <p class="rating">별점: {{ review.rating }}</p>
+                <p>{{ review.comment }}</p>
+            </div>
+            {% endfor %}
+            <div class="add-review">
+                <a href="{% url 'add_review' lecture.pk %}">리뷰 추가</a>
+            </div>
         </div>
-        {% endfor %}
     </div>
 </body>
 </html>

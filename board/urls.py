@@ -4,6 +4,7 @@ from .views import Main, BoardDetailView, PostDetailView, CommentCreateView, Com
 
 urlpatterns = [
     path('main/', Main.as_view(), name='main'),
+
     path('board/<str:board_name>/', BoardDetailView.as_view(), name='board_detail'),
     path('board/<str:board_name>/write/', BoardWriteView.as_view(), name='board_write'),  # 글쓰기 URL 패턴 추가
     path('post/<int:post_id>/', PostDetailView.as_view(), name='post_detail'),

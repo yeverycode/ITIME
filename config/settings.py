@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'user',
     'main',
     'board',
+    'lecture',
 ]
 
 MIDDLEWARE = [

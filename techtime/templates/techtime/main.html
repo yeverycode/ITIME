@@ -10,15 +10,87 @@
             margin: 0;
             padding: 0;
             background-color: white;
+            height: 100%;
         }
         .container {
-            width: 60%;
-            background-color: #fff;
-            border: 1px solid #ddd;
+            display: flex;
+            width: 100%;
+        }
+        .sidebar {
+            width: 10%;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            top: 150px;
+            left: 200px; /* 왼쪽에서 50px 띄움 */
+            background-color: #fff;
+            overflow-y: auto; /* 사이드바 내용이 많을 때 스크롤바 표시 */
+            height: calc(100% - 150px); /* 페이지 높이에서 top 값 뺌 */
+            position: fixed; /* 고정 위치로 설정 */
+        }
+        .content {
+            margin-left:  calc(13% + 200px); /* 사이드바 너비(15%)와 left 값(50px) 및 여백(20px)을 합산 */
+            padding: 20px;
+            width: 600px; /* 전체 너비에서 사이드바 너비와 left 값 및 여백을 뺌 */
+            min-height: calc(100vh - 150px); /* 전체 페이지 높이에서 top 값 뺌 */
+            overflow-y: auto; /* 메인 콘텐츠 영역에 스크롤바 표시 */
+        }
+        .profile {
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 135px;
+            margin-bottom: 20px; /* 아래쪽 여백 추가 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+        }
+        .profile img {
+            width:100px;
+            height:100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        .profile p {
+            margin: 5px 0;
+        }
+        .nickname {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .realname, .userid {
+            font-size: 13px;
+        }
+        .button-container {
             display: flex;
-            flex-direction: row; /* Flexbox 사용 */
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .profile-button {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 5px;
+            background-color: white;
+            cursor: pointer;
+            font-size: 13px;
+            margin-right: 2px;
+        }
+        .profile-button:hover {
+            background-color: #f0f0f0;
+        }
+        .nav-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 135px;
+            margin-bottom: 20px; /* 아래쪽 여백 추가 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+        }
+        .nav-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .nav-item:hover {
+            background-color: #f0f0f0;
         }
         .board-table {
             display: grid;
@@ -29,11 +101,19 @@
             border: 1px solid #ddd;
             padding: 10px;
             background-color: #fff;
-            border-radius: 4px;
+            border-radius: 0px;
+
         }
         .board h2 {
             font-size: 18px;
+            border-bottom: 1px solid lightgray; /* 게시판 제목 아래 구분선 추가 */
             color: red;
+            padding-bottom: 10px; /* 구분선과 제목 간격 */
+            margin-top: 0; /* 위쪽 여백 제거 */
+        }
+        .board h2 a {
+            color: red; /* 글씨 색상을 빨간색으로 설정 */
+             text-decoration: none; /* 글씨 밑에 생성되는 선 제거 */
         }
         .board ul {
             list-style: none;
@@ -41,11 +121,18 @@
             margin: 0;
         }
         .board li {
-            padding: 5px 0;
-            border-bottom: 1px solid #eee;
+            height: 30px; /* 각 게시글의 높이 설정 */
+            line-height: 40px; /* 텍스트를 중앙에 배치 */
+            border-bottom: 1px solid lightgray; /* 게시글 구분선 추가 */
+
         }
         .board li:last-child {
             border-bottom: none;
+        }
+        .board a {
+            text-decoration: none; /* 게시글 링크의 밑줄 제거 */
+            display: block; /* a 태그를 블록 요소로 설정하여 중앙 정렬 효과 적용 */
+            height: 100%; /* a 태그가 부모 요소의 전체 높이를 차지하도록 설정 */
         }
         header {
             background-color: white;
@@ -115,70 +202,6 @@
         .login-button span {
             margin-left: 5px;
         }
-        section {
-            padding: 20px;
-            display: flex;
-            align-items: flex-start;
-            flex-direction: column;
-        }
-        .profile {
-            border: 1px solid #ddd;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            width: 150px;
-            margin-right: 20px; /* 프로필과 게시판 사이의 간격 */
-            text-align: center;
-        }
-        .profile img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-        }
-        .profile p {
-            margin: 5px 0;
-        }
-        .nickname {
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .realname, .userid {
-            font-size: 13px;
-        }
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        .profile-button {
-            flex: 1;
-            border: 1px solid #ddd;
-            padding: 5px;
-            background-color: white;
-            cursor: pointer;
-            font-size: 13px;
-            margin-right: 2px;
-        }
-        .profile-button:hover {
-            background-color: #f0f0f0;
-        }
-        .nav-box {
-            border: 1px solid #ddd;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            width: 170px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .nav-item {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-        .nav-item:hover {
-            background-color: #f0f0f0;
-        }
         .icons {
             display: flex;
             align-items: center;
@@ -210,7 +233,6 @@
     </style>
 </head>
 <body>
-    {% load static %}
     <header>
         <div>
             <img src="https://i.imgur.com/gCaZS0X.png" alt="로고">
@@ -225,43 +247,48 @@
     </header>
     <nav>
         <a href="{% url 'main' %}" class="active">게시판</a>
-        <a href="{% url 'lectures' %}">강의실</a>
-        <a href="#book">책방</a>
+        <a href="{% url 'lecture_room' %}">강의실</a>
     </nav>
-    <section>
-        <div class="profile">
-            <img id="profile-img" style="width: 150px" src="{{ user.profile_image_url |default:'https://cf-fpi.everytime.kr/0.png' }}" alt="Profile Image">
-            <p class="nickname">{{ user.profile.nickname }}</p>
-            <p class="realname">{{ user.name }}</p>
-            <p class="userid">{{ user.email }}</p>
-            <div class="button-container">
-                <button id="profile-button" class="profile-button">내 정보</button>
-                <button id="logout-button" class="profile-button">로그아웃</button>
-            </div>
-        </div>
-        <div class="container">
-            <div class="board-table">
-                {% for board_name, posts in boards_with_posts.items %}
-                <div class="board">
-                    <h2><a href="{% url 'board_detail' board_name %}">{{ board_name }}</a></h2>
-                    <ul>
-                        {% for post in posts %}
-                        <li><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></li>
-                        {% endfor %}
-                    </ul>
+    <div class="container">
+        <div class="sidebar">
+            <div class="profile">
+                <img id="profile-img" style="width: 100px" src="{{ user.profile_image_url |default:'https://cf-fpi.everytime.kr/0.png' }}" alt="Profile Image">
+                <p class="nickname">{{ user.profile.nickname }}</p>
+                <p class="realname">{{ user.name }}</p>
+                <p class="userid">{{ user.email }}</p>
+                <div class="button-container">
+                    <button id="profile-button" class="profile-button">내 정보</button>
+                    <button id="logout-button" class="profile-button">로그아웃</button>
                 </div>
-                {% endfor %}
+            </div>
+            <div class="nav-box">
+                <div class="nav-item">내가 쓴 글</div>
+                <div class="nav-item">댓글 단 글</div>
+                <div class="nav-item">내 스크랩</div>
             </div>
         </div>
-        <div class="nav-box">
-            <div class="nav-item">내가 쓴 글</div>
-            <div class="nav-item">댓글 단 글</div>
-            <div class="nav-item">내 스크랩</div>
+        <div class="content">
+            <section>
+                <div class="board-table">
+                    {% for board_name, posts in boards_with_posts.items %}
+                    <div class="board">
+                        <h2><a href="{% url 'board_detail' board_name %}">{{ board_name }}</a></h2>
+                        <ul>
+                            {% for post in posts %}
+                            <li><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
         </div>
-    </section>
+    </div>
     <footer>
         <p>&copy; COSMOS (COding Study MOimS)</p>
     </footer>
+</body>
+</html>
 
 <script>
     // 강의실과 책방 링크 클릭 시 active 클래스를 추가하여 스타일 변경

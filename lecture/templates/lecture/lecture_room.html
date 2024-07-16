@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>강의실</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #212121;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header img {
+            height: 50px;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #333333;
+            padding: 10px;
+        }
+        nav a {
+            color: #ffffff;
+            padding: 10px 20px;
+            text-decoration: none;
+        }
+        nav a.active, nav a:hover {
+            color: #ff0000;
+        }
+        .container {
+            padding: 20px;
+        }
+        .lecture {
+            background-color: #1e1e1e;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .lecture h3 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .lecture p {
+            margin: 5px 0;
+        }
+        .lecture .rating {
+            color: #ffa500;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://i.imgur.com/gCaZS0X.png" alt="로고">
+    </header>
+    <nav>
+        <a href="{% url 'main' %}">메인 페이지</a>
+        <a href="{% url 'lecture_room' %}" class="active">강의실</a>
+        <a href="{% url 'main' %}">게시판</a>
+    </nav>
+    <div class="container">
+        <h1>강의실</h1>
+        {% for lecture in lectures %}
+        <div class="lecture">
+            <h3><a href="{% url 'lecture_detail' lecture.pk %}">{{ lecture.course_name }}</a></h3>
+            <p>과목명: {{ lecture.course_name }}</p>
+            <p>교수명: {{ lecture.professor }}</p>
+            <p class="rating">평점: {{ lecture.avg_rating|floatformat:1|default:"평점 없음" }}</p>
+            {% if lecture.reviews.first %}
+            <p>{{ lecture.reviews.first.comment }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
