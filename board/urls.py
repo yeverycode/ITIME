@@ -1,12 +1,14 @@
+# board/urls.py
 from django.urls import path
-from .views import BoardView, BoardWriteView, PostDetailView, like_post, bookmark_post, CommentCreateView, CommentDeleteView
+from .views import Main, BoardDetailView, PostDetailView, CommentCreateView, CommentDeleteView, like_post, bookmark_post, BoardWriteView
 
 urlpatterns = [
-    path('', BoardView.as_view(), name='board'),
-    path('write/', BoardWriteView.as_view(), name='board_write'),
+    path('main/', Main.as_view(), name='main'),
+    path('board/<str:board_name>/', BoardDetailView.as_view(), name='board_detail'),
+    path('board/<str:board_name>/write/', BoardWriteView.as_view(), name='board_write'),  # 글쓰기 URL 패턴 추가
     path('post/<int:post_id>/', PostDetailView.as_view(), name='post_detail'),
     path('post/<int:post_id>/like/', like_post, name='like_post'),
     path('post/<int:post_id>/bookmark/', bookmark_post, name='bookmark_post'),
-    path('post/<int:post_id>/comment/', CommentCreateView.as_view(), name='add_comment'),
-    path('post/<int:post_id>/comment/<int:comment_id>/delete/', CommentDeleteView.as_view(), name='delete_comment'),
+    path('post/<int:post_id>/comment/add/', CommentCreateView.as_view(), name='add_comment'),
+    path('post/<int:post_id>/comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='delete_comment'),
 ]

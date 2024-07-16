@@ -1,7 +1,8 @@
+# board/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from rest_framework.views import APIView
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from .models import Post, Board, ArticleComment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
@@ -9,30 +10,55 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView
 
-class BoardView(View):
+class Main(APIView):
     def get(self, request):
-        posts = Post.objects.all().order_by('-created_at')
-        return render(request, 'board/post_list.html', {'posts': posts})
+        feeds = Post.objects.all().order_by('-created_at')
 
-@method_decorator(login_required, name='dispatch')
+        boards = Board.objects.all()
+        boards_with_posts = {}
+        for board in boards:
+            boards_with_posts[board] = Post.objects.filter(board=board).order_by('-created_at')[:5]
+
+        return render(request, "techtime/main.html", context={'feeds': feeds, 'boards_with_posts': boards_with_posts})
+
+
 class BoardWriteView(View):
-    def get(self, request):
+    @method_decorator(login_required)
+    def get(self, request, board_name):
         form = PostForm()
-        return render(request, 'board/post_form.html', {'form': form})
+        return render(request, 'board/post_form.html', {'form': form, 'board_name': board_name})
 
-    def post(self, request):
+    @method_decorator(login_required)
+    def post(self, request, board_name):
+        board = get_object_or_404(Board, name=board_name)
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.user = request.user
-            # 기본 보드를 가져오거나 생성합니다.
-            board, created = Board.objects.get_or_create(name="기본 보드", defaults={'description': '기본 보드 설명'})
             post.board = board
-            if form.cleaned_data['is_anonymous']:
-                post.is_anonymous = True
             post.save()
-            return redirect('board')
-        return render(request, 'board/post_form.html', {'form': form})
+            return redirect('board_detail', board_name=board_name)
+        return render(request, 'board/post_form.html', {'form': form, 'board_name': board_name})
+
+class BoardDetailView(View):
+    def get(self, request, board_name):
+        board = get_object_or_404(Board, name=board_name)
+        posts = Post.objects.filter(board=board).order_by('-created_at')
+        form = PostForm()  # 게시글 작성 폼 추가
+        return render(request, 'board/board_detail.html', {'board': board, 'posts': posts, 'form': form})
+
+    @method_decorator(login_required)
+    def post(self, request, board_name):
+        board = get_object_or_404(Board, name=board_name)
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = request.user
+            post.board = board
+            post.save()
+            return redirect('board_detail', board_name=board_name)
+        posts = Post.objects.filter(board=board).order_by('-created_at')
+        return render(request, 'board/board_detail.html', {'board': board, 'posts': posts, 'form': form})
 
 class PostDetailView(DetailView):
     model = Post
@@ -45,8 +71,8 @@ class PostDetailView(DetailView):
         post = self.get_object()
         context['comments'] = ArticleComment.objects.filter(post=post)
         context['comment_form'] = CommentForm()
-        context['is_liked'] = post.likes.filter(id=self.request.user.id).exists() if self.request.user.is_authenticated else False
-        context['is_bookmarked'] = post.bookmarks.filter(id=self.request.user.id).exists() if self.request.user.is_authenticated else False
+        context['is_liked'] = post.likes.filter(id=self.request.user.id).exists()
+        context['is_bookmarked'] = post.bookmarks.filter(id=self.request.user.id).exists()
         return context
 
 @login_required
@@ -74,7 +100,6 @@ def bookmark_post(request, post_id):
 class CommentCreateView(CreateView):
     model = ArticleComment
     form_class = CommentForm
-    template_name = 'board/post_detail.html'  # 댓글 생성 후 리디렉션할 템플릿
 
     def form_valid(self, form):
         form.instance.post = get_object_or_404(Post, pk=self.kwargs['post_id'])
@@ -84,7 +109,7 @@ class CommentCreateView(CreateView):
 
 class CommentDeleteView(DeleteView):
     model = ArticleComment
-    template_name = 'board/post_confirm_delete.html'
+    template_name = 'techtime/post_confirm_delete.html'
     context_object_name = 'comment'
 
     def get_success_url(self):

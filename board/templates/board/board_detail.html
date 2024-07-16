@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자유게시판</title>
+    <title>{{ board.name }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -86,13 +86,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>자유게시판</h1>
+            <h1>{{ board.name }}</h1>
         </div>
         <div class="post-input">
-            <input type="text" placeholder="새 글을 작성해주세요!" />
-            <div class="icon">
-                <a href="{% url 'post_form' %}">✎</a>
-            </div>
+            <a href="{% url 'board_write' board.name %}" class="icon">✎ 글쓰기</a>
         </div>
         {% for post in posts %}
         <div class="post">

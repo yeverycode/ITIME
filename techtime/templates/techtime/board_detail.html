@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>자유게시판</title>
+    <title>{{ board.name }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
+            background-color: white;
         }
         .container {
             width: 80%;
@@ -86,13 +86,14 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>자유게시판</h1>
+            <h1>{{ board.name }}</h1>
         </div>
         <div class="post-input">
-            <input type="text" placeholder="새 글을 작성해주세요!" />
-            <div class="icon">
-                <a href="{% url 'post_form' %}">✎</a>
-            </div>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">작성</button>
+            </form>
         </div>
         {% for post in posts %}
         <div class="post">
@@ -101,9 +102,6 @@
                     <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
                 </div>
                 <div class="post-meta">{{ post.timestamp }} | {{ post.author }}</div>
-            </div>
-            <div class="post-thumbnail">
-                <img src="https://via.placeholder.com/80" alt="thumbnail">
             </div>
         </div>
         {% endfor %}
