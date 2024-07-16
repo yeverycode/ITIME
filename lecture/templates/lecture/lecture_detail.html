@@ -37,40 +37,63 @@
         .container {
             padding: 20px;
         }
-        .lecture {
+        .lecture-detail {
             background-color: #1e1e1e;
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 5px;
         }
-        .lecture h3 {
+        .lecture-detail h2 {
             margin: 0;
             font-size: 24px;
         }
-        .lecture p {
+        .lecture-detail p {
             margin: 5px 0;
         }
-        .lecture .rating {
+        .lecture-detail .rating {
             color: #ffa500;
+        }
+        .review-list {
+            margin-top: 20px;
+        }
+        .review-list h3 {
+            margin-bottom: 10px;
         }
         .review {
             background-color: #2e2e2e;
             padding: 10px;
-            margin-top: 10px;
+            margin-bottom: 10px;
             border-radius: 5px;
         }
-        .add-review {
-            margin-top: 20px;
+        .review-form {
+            background-color: #1e1e1e;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
         }
-        .add-review a {
-            color: #ffffff;
+        .review-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+        }
+        .review-form button {
             background-color: #ff0000;
+            color: #ffffff;
             padding: 10px 20px;
-            text-decoration: none;
+            border: none;
             border-radius: 5px;
+            cursor: pointer;
         }
-        .add-review a:hover {
-            background-color: #cc0000;
+        .review-form a {
+            background-color: #ff0000;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -81,23 +104,27 @@
     <nav>
         <a href="{% url 'main' %}">메인 페이지</a>
         <a href="{% url 'lecture_room' %}">강의실</a>
-        <a href="{% url 'main' %}">게시판</a>
+        <a href="{% url 'board_detail' 'general' %}">게시판</a>
     </nav>
     <div class="container">
-        <h1>{{ lecture.course_name }}</h1>
-        <div class="lecture">
-            <h3>{{ lecture.course_name }}</h3>
+        <div class="lecture-detail">
+            <h2>{{ lecture.course_name }}</h2>
             <p>교수명: {{ lecture.professor }}</p>
-            <p class="rating">평점: {{ avg_rating|floatformat:1 }}</p>
+            <p class="rating">평점: {{ lecture.average_rating }}</p>
+            <p>{{ lecture.summary }}</p>
+        </div>
+        <div class="review-list">
+            <h3>강의평</h3>
             {% for review in reviews %}
             <div class="review">
-                <p class="rating">별점: {{ review.rating }}</p>
+                <p>{{ review.rating }} / 5</p>
                 <p>{{ review.comment }}</p>
             </div>
             {% endfor %}
-            <div class="add-review">
-                <a href="{% url 'add_review' lecture.pk %}">리뷰 추가</a>
-            </div>
+        </div>
+        <div class="review-form">
+            <h3>강의평 작성</h3>
+            <a href="{% url 'add_review' lecture.id %}">리뷰 작성하기</a>
         </div>
     </div>
 </body>
