@@ -35,42 +35,108 @@
             color: #ff0000;
         }
         .container {
+            display: flex;
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        .lecture {
+        .left-section {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .right-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+        }
+        .lecture-detail {
             background-color: #1e1e1e;
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 5px;
+            margin-left: 200px;
+            width: 300px;
         }
-        .lecture h3 {
+        .lecture-detail h2 {
             margin: 0;
             font-size: 24px;
         }
-        .lecture p {
+        .lecture-detail p {
             margin: 5px 0;
         }
-        .lecture .rating {
+        .lecture-detail .stars {
             color: #ffa500;
+        }
+        .review-list {
+            flex: 1;
+            margin-top: 20px;
+            overflow-y: auto;
+        }
+        .review-list h3 {
+            margin-bottom: 10px;
         }
         .review {
             background-color: #2e2e2e;
             padding: 10px;
-            margin-top: 10px;
+            margin-bottom: 10px;
             border-radius: 5px;
+            margin-right: 300px;
+            width: 500px;
         }
-        .add-review {
-            margin-top: 20px;
+        .review hr {
+            border: 1px solid #333;
         }
-        .add-review a {
-            color: #ffffff;
+        .review-form {
+            display: inline-block;
             background-color: #ff0000;
+            color: #ffffff;
             padding: 10px 20px;
-            text-decoration: none;
+            border: none;
             border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 10px;
+            text-align: center;
         }
-        .add-review a:hover {
-            background-color: #cc0000;
+        .review-form:hover {
+            background-color: #e60000;
+        }
+        .icon-button i {
+            margin-right: 5px;
+        }
+        .summary {
+            background-color: #2e2e2e;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            width: 500px;
+        }
+        .summary h3 {
+            margin: 0 0 10px 0;
+        }
+        .summary-item {
+            margin-bottom: 10px;
+        }
+        .summary-item span {
+            display: inline-block;
+            width: 70px;
+            color: #aaa;
+        }
+        .rating-summary {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .rating-summary .rating-bar {
+            height: 10px;
+            background-color: #ffa500;
+            border-radius: 5px;
+            margin-left: 10px;
+            flex: 1;
+        }
+        .rating-summary .rating-percentage {
+            margin-left: 10px;
+            color: #aaa;
         }
     </style>
 </head>
@@ -80,25 +146,63 @@
     </header>
     <nav>
         <a href="{% url 'main' %}">메인 페이지</a>
-        <a href="{% url 'lecture_room' %}">강의실</a>
-        <a href="{% url 'main' %}">게시판</a>
+        <a href="{% url 'lecture_room' %}" class="active">강의실</a>
     </nav>
     <div class="container">
-        <h1>{{ lecture.course_name }}</h1>
-        <div class="lecture">
-            <h3>{{ lecture.course_name }}</h3>
-            <p>교수명: {{ lecture.professor }}</p>
-            <p class="rating">평점: {{ avg_rating|floatformat:1 }}</p>
-            {% for review in reviews %}
-            <div class="review">
-                <p class="rating">별점: {{ review.rating }}</p>
-                <p>{{ review.comment }}</p>
+        <div class="left-section">
+            <div class="lecture-detail">
+                <h2>{{ lecture.course_name }}</h2>
+                <p>교수명: {{ lecture.professor }}</p>
+                <div class="stars">
+                    {% for i in "12345" %}
+                        <i class="fas fa-star{% if i > lecture.average_rating|stringformat:'d' %}-o{% endif %}"></i>
+                    {% endfor %}
+                </div>
+                <p>{{ lecture.summary }}</p>
+                <a href="{% url 'add_review' lecture.id %}" class="review-form">
+                    리뷰 작성하기
+                </a>
             </div>
-            {% endfor %}
-            <div class="add-review">
-                <a href="{% url 'add_review' lecture.pk %}">리뷰 추가</a>
+        </div>
+        <div class="right-section">
+            <div class="summary">
+                <h3>요약</h3>
+                {% with total_reviews=reviews.count %}
+                <div class="summary-item">
+                    <span>과제:</span>
+                    <div class="rating-summary">
+                        <div class="rating-bar" style="width: 67%;"></div>
+                        <div class="rating-percentage">{{ reviews|length|divisibleby:total_reviews }}%</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span>조모임:</span>
+                    <div class="rating-summary">
+                        <div class="rating-bar" style="width: 13%;"></div>
+                        <div class="rating-percentage">{{ reviews|length|divisibleby:total_reviews }}%</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span>성적:</span>
+                    <div class="rating-summary">
+                        <div class="rating-bar" style="width: 100%;"></div>
+                        <div class="rating-percentage">{{ reviews|length|divisibleby:total_reviews }}%<</div>
+                    </div>
+                </div>
+                {% endwith %}
+            </div>
+            <div class="review-list">
+                <h3>강의평</h3>
+                {% for review in reviews %}
+                <div class="review">
+                    <p>{{ review.rating }} / 5</p>
+                    <p>{{ review.comment }}</p>
+                    <hr> <!-- 구분선 추가 -->
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>

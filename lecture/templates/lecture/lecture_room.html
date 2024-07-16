@@ -35,7 +35,15 @@
             color: #ff0000;
         }
         .container {
+            display: flex;
             padding: 20px;
+        }
+        .search-container {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .lectures-container {
+            flex: 3;
         }
         .lecture {
             background-color: #1e1e1e;
@@ -43,17 +51,46 @@
             margin-bottom: 15px;
             border-radius: 5px;
         }
-        .lecture h3 {
-            margin: 0;
-            font-size: 24px;
+        .lecture h3 a {
+            color: #FFFFFF;
+            font-size: 16px;
+            text-decoration: none;
         }
-        .lecture p {
-            margin: 5px 0;
+        .lecture h3, .lecture p {
+            margin: 2px 0; /* 최소 여백 */
         }
         .lecture .rating {
             color: #ffa500;
         }
+        .stars {
+            display: inline-block;
+        }
+        .stars i {
+            color: #ffa500;
+            font-size: 16px;
+        }
+        .search-form {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .search-form input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px 0 0 5px;
+            border: none;
+            width: 300px;
+            margin-left: 300px;
+        }
+        .search-form button {
+            padding: 10px 20px;
+            border-radius: 0 5px 5px 0;
+            border: none;
+            background-color: #ff0000;
+            color: #ffffff;
+            cursor: pointer;
+        }
     </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
@@ -62,21 +99,38 @@
     <nav>
         <a href="{% url 'main' %}">메인 페이지</a>
         <a href="{% url 'lecture_room' %}" class="active">강의실</a>
-        <a href="{% url 'main' %}">게시판</a>
     </nav>
     <div class="container">
-        <h1>강의실</h1>
-        {% for lecture in lectures %}
-        <div class="lecture">
-            <h3><a href="{% url 'lecture_detail' lecture.pk %}">{{ lecture.course_name }}</a></h3>
-            <p>과목명: {{ lecture.course_name }}</p>
-            <p>교수명: {{ lecture.professor }}</p>
-            <p class="rating">평점: {{ lecture.avg_rating|floatformat:1|default:"평점 없음" }}</p>
-            {% if lecture.reviews.first %}
-            <p>{{ lecture.reviews.first.comment }}</p>
-            {% endif %}
+        <div class="search-container">
+            <h1>강의실</h1>
+            <form method="GET" class="search-form">
+                <input type="text" name="q" placeholder="강의명 또는 교수명으로 검색">
+                <button type="submit">검색</button>
+            </form>
         </div>
-        {% endfor %}
+        <div class="lectures-container">
+            {% for lecture in lectures %}
+            <div class="lecture">
+                <h3><a href="{% url 'lecture_detail' lecture.id %}">{{ lecture.course_name }}</a></h3>
+                <p>교수명: {{ lecture.professor }}</p>
+                <p class="rating">
+                    평점:
+                    <span class="stars">
+                        {% for i in "12345" %}
+                            {% if i <= lecture.average_rating|floatformat:0 %}
+                                <i class="fas fa-star"></i>
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                    ({{ lecture.average_rating|floatformat:1 }})
+                </p>
+                <p>{{ lecture.summary }}</p>
+                <div class="divider"></div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </body>
 </html>

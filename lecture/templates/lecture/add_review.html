@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>리뷰 추가</title>
+    <title>강의 평가</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,76 +20,195 @@
         header img {
             height: 50px;
         }
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #333333;
-            padding: 10px;
-        }
-        nav a {
-            color: #ffffff;
-            padding: 10px 20px;
-            text-decoration: none;
-        }
-        nav a.active, nav a:hover {
-            color: #ff0000;
-        }
         .container {
             padding: 20px;
         }
-        form {
+        .review-form {
             background-color: #1e1e1e;
-            padding: 20px;
+            padding: 15px;
             border-radius: 5px;
         }
-        form div {
+        .review-form h2 {
+            margin-top: 0;
+        }
+        .stars {
+            display: flex;
+            gap: 5px;
+        }
+        .stars input {
+            display: none;
+        }
+        .stars label {
+            font-size: 24px;
+            color: #ffa500;
+            cursor: pointer;
+        }
+        .stars input:checked ~ label,
+        .stars label:hover,
+        .stars label:hover ~ label {
+            color: #ffcc00;
+        }
+        .rating-text {
+            font-size: 18px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background-color: #333;
+            color: #fff;
+        }
+        .questions {
+            margin-top: 20px;
+        }
+        .questions div {
             margin-bottom: 10px;
         }
-        label {
+        .questions label {
             display: block;
             margin-bottom: 5px;
         }
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
+        .questions input[type="radio"] {
+            display: none;
         }
-        button {
+        .questions label span {
+            display: inline-block;
+            padding: 5px 10px;
+            border: 1px solid #444;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .questions input[type="radio"]:checked + span,
+        .questions label span:hover {
+            background-color: #333;
+        }
+        .questions input[type="radio"]:checked + span {
+            background-color: #555;
+            border-color: #777;
+        }
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
             background-color: #ff0000;
-            color: #ffffff;
-            padding: 10px 20px;
+            color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
-        button:hover {
+        .submit-button:hover {
             background-color: #cc0000;
         }
     </style>
+    <script>
+        function updateRatingText() {
+            const rating = document.querySelector('input[name="rating"]:checked').value;
+            document.querySelector('.rating-text').innerText = `${rating}/5`;
+        }
+
+        function highlightSelected(group, labelId) {
+            const labels = document.querySelectorAll(`.${group} label span`);
+            labels.forEach(label => {
+                label.style.backgroundColor = '';
+                label.style.borderColor = '#444';
+            });
+            document.getElementById(labelId).style.backgroundColor = '#555';
+            document.getElementById(labelId).style.borderColor = '#777';
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('input[name="rating"]').forEach(star => {
+                star.addEventListener('change', updateRatingText);
+            });
+        });
+    </script>
 </head>
 <body>
     <header>
         <img src="https://i.imgur.com/gCaZS0X.png" alt="로고">
     </header>
-    <nav>
-        <a href="{% url 'main' %}">메인 페이지</a>
-        <a href="{% url 'lecture_room' %}" class="active">강의실</a>
-        <a href="{% url 'main' %}">게시판</a>
-    </nav>
     <div class="container">
-        <h1>리뷰 추가</h1>
-        <form method="post">
+        <h1>강의 평가</h1>
+        <form class="review-form" action="{% url 'submit_review' %}" method="post">
             {% csrf_token %}
-            <div>
-                <label for="id_rating">평점</label>
-                {{ form.rating }}
+            <input type="hidden" name="lecture_id" value="{{ lecture.id }}">
+            <h2>강의평가</h2>
+            <div class="stars">
+                <input type="radio" name="rating" id="star1" value="1">
+                <label for="star1">★</label>
+                <input type="radio" name="rating" id="star2" value="2">
+                <label for="star2">★</label>
+                <input type="radio" name="rating" id="star3" value="3">
+                <label for="star3">★</label>
+                <input type="radio" name="rating" id="star4" value="4">
+                <label for="star4">★</label>
+                <input type="radio" name="rating" id="star5" value="5">
+                <label for="star5">★</label>
             </div>
-            <div>
-                <label for="id_comment">코멘트</label>
-                {{ form.comment }}
+            <p class="rating-text">0/5</p>
+            <textarea name="comment" placeholder="이 강의에 대한 총평을 작성해주세요."></textarea>
+            <div class="questions">
+                <div class="homework-group">
+                    <label>과제가 많은가요?</label>
+                    <input type="radio" name="homework" id="homework1" value="many">
+                    <label for="homework1"><span id="label-homework1" onclick="highlightSelected('homework-group', 'label-homework1')">많음</span></label>
+                    <input type="radio" name="homework" id="homework2" value="average">
+                    <label for="homework2"><span id="label-homework2" onclick="highlightSelected('homework-group', 'label-homework2')">보통</span></label>
+                    <input type="radio" name="homework" id="homework3" value="none">
+                    <label for="homework3"><span id="label-homework3" onclick="highlightSelected('homework-group', 'label-homework3')">없음</span></label>
+                </div>
+                <div class="groupwork-group">
+                    <label>조모임이 많은가요?</label>
+                    <input type="radio" name="groupwork" id="groupwork1" value="many">
+                    <label for="groupwork1"><span id="label-groupwork1" onclick="highlightSelected('groupwork-group', 'label-groupwork1')">많음</span></label>
+                    <input type="radio" name="groupwork" id="groupwork2" value="average">
+                    <label for="groupwork2"><span id="label-groupwork2" onclick="highlightSelected('groupwork-group', 'label-groupwork2')">보통</span></label>
+                    <input type="radio" name="groupwork" id="groupwork3" value="none">
+                    <label for="groupwork3"><span id="label-groupwork3" onclick="highlightSelected('groupwork-group', 'label-groupwork3')">없음</span></label>
+                </div>
+                <div class="grading-group">
+                    <label>성적은 어떻게 주시나요?</label>
+                    <input type="radio" name="grading" id="grading1" value="generous">
+                    <label for="grading1"><span id="label-grading1" onclick="highlightSelected('grading-group', 'label-grading1')">너그러움</span></label>
+                    <input type="radio" name="grading" id="grading2" value="average">
+                    <label for="grading2"><span id="label-grading2" onclick="highlightSelected('grading-group', 'label-grading2')">보통</span></label>
+                    <input type="radio" name="grading" id="grading3" value="strict">
+                    <label for="grading3"><span id="label-grading3" onclick="highlightSelected('grading-group', 'label-grading3')">깐깐함</span></label>
+                </div>
+                <div class="attendance-group">
+                    <label>출석은 어떻게 확인하나요?</label>
+                    <input type="radio" name="attendance" id="attendance1" value="complex">
+                    <label for="attendance1"><span id="label-attendance1" onclick="highlightSelected('attendance-group', 'label-attendance1')">복합적</span></label>
+                    <input type="radio" name="attendance" id="attendance2" value="direct">
+                    <label for="attendance2"><span id="label-attendance2" onclick="highlightSelected('attendance-group', 'label-attendance2')">직접호명</span></label>
+                    <input type="radio" name="attendance" id="attendance3" value="designated">
+                    <label for="attendance3"><span id="label-attendance3" onclick="highlightSelected('attendance-group', 'label-attendance3')">지정좌석</span></label>
+                    <input type="radio" name="attendance" id="attendance4" value="electronic">
+                    <label for="attendance4"><span id="label-attendance4" onclick="highlightSelected('attendance-group', 'label-attendance4')">전자출결</span></label>
+                    <input type="radio" name="attendance" id="attendance5" value="none">
+                    <label for="attendance5"><span id="label-attendance5" onclick="highlightSelected('attendance-group', 'label-attendance5')">반영안함</span></label>
+                </div>
+                <div class="exams-group">
+                    <label>시험은 몇 번 보나요?</label>
+                    <input type="radio" name="exams" id="exams1" value="4_or_more">
+                    <label for="exams1"><span id="label-exams1" onclick="highlightSelected('exams-group', 'label-exams1')">네 번 이상</span></label>
+                    <input type="radio" name="exams" id="exams2" value="3">
+                    <label for="exams2"><span id="label-exams2" onclick="highlightSelected('exams-group', 'label-exams2')">세 번</span></label>
+                    <input type="radio" name="exams" id="exams3" value="2">
+                    <label for="exams3"><span id="label-exams3" onclick="highlightSelected('exams-group', 'label-exams3')">두 번</span></label>
+                    <input type="radio" name="exams" id="exams4" value="1">
+                    <label for="exams4"><span id="label-exams4" onclick="highlightSelected('exams-group', 'label-exams4')">한 번</span></label>
+                    <input type="radio" name="exams" id="exams5" value="none">
+                    <label for="exams5"><span id="label-exams5" onclick="highlightSelected('exams-group', 'label-exams5')">없음</span></label>
+                </div>
             </div>
-            <button type="submit">리뷰 추가</button>
+            <button type="submit" class="submit-button">평가하기</button>
         </form>
     </div>
 </body>
