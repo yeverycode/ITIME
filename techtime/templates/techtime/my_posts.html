@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>내가 쓴 글</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .post-list {
+            width: 60%;
+            margin: 0 auto;
+        }
+        .post-item {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .post-item h3 {
+            margin: 0;
+        }
+        .post-item p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #000;
+        }
+        .pagination a.active {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="post-list">
+        <h2>내가 쓴 글</h2>
+        {% if page_obj.object_list %}
+            {% for post in page_obj.object_list %}
+            <div class="post-item">
+                <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+                <p>{{ post.content }}</p>
+                <p>{{ post.created_at|date:"m/d H:i" }} | {{ post.is_anonymous|yesno:"익명,실명" }}</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>게시글이 없습니다.</p>
+        {% endif %}
+    </div>
+    <div class="pagination">
+        {% if is_paginated %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; 처음</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">이전</a>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <a class="active">{{ num }}</a>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">다음</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">마지막 &raquo;</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

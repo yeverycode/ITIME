@@ -135,3 +135,17 @@ LOGIN_URL = '/user/login/'  # 추가된 부분
 APPEND_SLASH = True
 
 AUTH_USER_MODEL = 'user.User'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}

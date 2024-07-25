@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 class Feed(models.Model):
     content = models.TextField()  # 글내용
@@ -57,6 +58,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
 from django.db import models
 from django.conf import settings

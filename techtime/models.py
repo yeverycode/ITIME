@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings  # settings.AUTH_USER_MODEL을 가져오기
+from django.contrib.auth.models import User
 
 class Feed(models.Model):
     content = models.TextField()  # 글내용
@@ -19,8 +20,6 @@ class Like(models.Model):
     def __str__(self):
         return f"{self.email} likes {self.feed}"
 
-from django.conf import settings
-
 class Reply(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='replies', default=1)  # 기본값 설정
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)  # 기본값 설정
@@ -30,7 +29,6 @@ class Reply(models.Model):
 
     def __str__(self):
         return f"Reply by {self.email} on {self.feed}"
-
 
 class Bookmark(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='bookmarks', default=1)  # 기본값 설정
@@ -80,8 +78,8 @@ class Board(models.Model):
 
 class Post(models.Model):
     post_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1, related_name='techtime_posts')
-    board = models.ForeignKey(Board, on_delete=models.CASCADE, default=1, related_name='techtime_posts')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posts')
+    board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='techtime_posts')
     title = models.CharField(max_length=255)
     content = models.TextField()
     like_number = models.IntegerField(default=0)
@@ -94,11 +92,35 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+
+
 class ArticleComment(models.Model):
+    id = models.AutoField(primary_key=True)  # 기본 키 명시적으로 정의
     post = models.ForeignKey(Post, related_name='techtime_comments', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='techtime_comments')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='techtime_article_comments')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.content
+
+class Scrap(models.Model):
+    id = models.AutoField(primary_key=True)  # 기본 키 명시적으로 정의
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='techtime_scraps')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Comment(models.Model):
+    id = models.AutoField(primary_key=True)  # 기본 키 명시적으로 정의
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='techtime_post_comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class User(models.Model):
+    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=150, unique=True)
+    # 기타 필드들
+
+    def __str__(self):
+        return self.username

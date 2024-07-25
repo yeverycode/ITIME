@@ -2,18 +2,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from rest_framework.views import APIView
 from django.http import JsonResponse, Http404
-from .models import Post, Board, Lecture, ArticleComment, Message
+from .models import Post, Board, Lecture, ArticleComment, Message, Scrap, Comment
 from .forms import PostForm, ProfileUpdateForm, CommentForm, MessageForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView
-
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 
 class Sub(APIView):
     def get(self, request):
         return render(request, "techtime/main.html")
-
 
 class Main(APIView):
     def get(self, request):
@@ -35,12 +35,10 @@ class Main(APIView):
         feeds = list(Post.objects.all().order_by('-created_at').values())
         return JsonResponse(feeds, safe=False)
 
-
 class BoardView(View):
     def get(self, request):
         posts = Post.objects.all().order_by('-created_at')
         return render(request, 'board/post_list.html', {'posts': posts})
-
 
 @method_decorator(login_required, name='dispatch')
 class BoardWriteView(View):
@@ -59,7 +57,6 @@ class BoardWriteView(View):
             post.save()
             return redirect('board')
         return render(request, 'post_form.html', {'form': form})
-
 
 class ProfileUpdateView(View):
     @method_decorator(login_required)
@@ -80,7 +77,6 @@ class ProfileUpdateView(View):
         else:
             return JsonResponse({'success': False, 'error': form.errors}, status=400)
 
-
 class UploadProfile(View):
     @method_decorator(login_required)
     def post(self, request):
@@ -93,12 +89,10 @@ class UploadProfile(View):
             return JsonResponse({'success': True})
         return JsonResponse({'success': False})
 
-
 class LectureView(View):
     def get(self, request):
         lectures = Lecture.objects.all()
         return render(request, 'techtime/lectures.html', {'lectures': lectures})
-
 
 @method_decorator(login_required, name='dispatch')
 class MessageSendView(View):
@@ -115,7 +109,6 @@ class MessageSendView(View):
             return redirect('message_list')
         return render(request, 'techtime/message_form.html', {'form': form})
 
-
 @method_decorator(login_required, name='dispatch')
 class MessageListView(View):
     def get(self, request):
@@ -126,11 +119,9 @@ class MessageListView(View):
             'sent_messages': sent_messages
         })
 
-
 class ChatView(View):
     def get(self, request):
         return render(request, 'techtime/chat.html')
-
 
 class PostDetailView(DetailView):
     model = Post
@@ -147,10 +138,9 @@ class PostDetailView(DetailView):
         context['is_bookmarked'] = post.bookmarks.filter(id=self.request.user.id).exists()
         return context
 
-
 @login_required
 def like_post(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+    post = get_object_or_404(Post, post_id=post_id)
     if request.user in post.likes.all():
         post.likes.remove(request.user)
         liked = False
@@ -159,10 +149,9 @@ def like_post(request, post_id):
         liked = True
     return JsonResponse({'liked': liked, 'like_count': post.likes.count()})
 
-
 @login_required
 def bookmark_post(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+    post = get_object_or_404(Post, post_id=post_id)
     if request.user in post.bookmarks.all():
         post.bookmarks.remove(request.user)
         bookmarked = False
@@ -170,7 +159,6 @@ def bookmark_post(request, post_id):
         post.bookmarks.add(request.user)
         bookmarked = True
     return JsonResponse({'bookmarked': bookmarked, 'bookmark_count': post.bookmarks.count()})
-
 
 class CommentCreateView(CreateView):
     model = ArticleComment
@@ -181,7 +169,6 @@ class CommentCreateView(CreateView):
         form.instance.user = self.request.user
         form.save()
         return redirect('post_detail', post_id=self.kwargs['post_id'])
-
 
 class CommentDeleteView(DeleteView):
     model = ArticleComment
@@ -194,7 +181,6 @@ class CommentDeleteView(DeleteView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(user=self.request.user)
-
 
 class BoardDetailView(View):
     def get(self, request, board_name):
@@ -215,3 +201,44 @@ class BoardDetailView(View):
             return redirect('board_detail', board_name=board_name)
         posts = Post.objects.filter(board=board).order_by('-created_at')
         return render(request, 'board/board_detail.html', {'board': board, 'posts': posts, 'form': form})
+
+class MyPostsView(LoginRequiredMixin, View):
+    def get(self, request):
+        posts = Post.objects.filter(user=request.user).values('post_id', 'title')
+        return JsonResponse(list(posts), safe=False)
+
+class MyScrapsView(LoginRequiredMixin, View):
+    def get(self, request):
+        scraps = Scrap.objects.filter(user=request.user).values('post__post_id', 'post__title')
+        return JsonResponse(list(scraps), safe=False)
+
+class MyCommentsView(LoginRequiredMixin, View):
+    def get(self, request):
+        comments = Comment.objects.filter(user=request.user).values('post__post_id', 'post__title')
+        return JsonResponse(list(comments), safe=False)
+
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from board.models import Post
+
+@login_required
+def my_posts(request):
+    user = request.user
+    posts_list = Post.objects.filter(user=user).order_by('-created_at')
+    paginator = Paginator(posts_list, 10)  # 페이지당 10개의 게시글
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+    }
+
+    # 디버깅 메시지 추가
+    print(f"User: {user.email}")
+    print(f"User ID: {user.id}")
+    print(f"Posts List: {posts_list}")
+    print(f"Page Object: {page_obj}")
+
+    return render(request, 'techtime/my_posts.html', context)
