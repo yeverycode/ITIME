@@ -1,3 +1,4 @@
+<!-- lecture/templates/lecture/lecture_room.html -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -57,7 +58,7 @@
             text-decoration: none;
         }
         .lecture h3, .lecture p {
-            margin: 2px 0; /* 최소 여백 */
+            margin: 2px 0;
         }
         .lecture .rating {
             color: #ffa500;
@@ -111,8 +112,8 @@
         <div class="lectures-container">
             {% for lecture in lectures %}
             <div class="lecture">
-                <h3><a href="{% url 'lecture_detail' lecture.id %}">{{ lecture.course_name }}</a></h3>
-                <p>교수명: {{ lecture.professor }}</p>
+                <h3><a href="{% url 'lecture_detail' lecture.id %}">{{ lecture.course_name_ko }}</a></h3>
+                <p>교과구분: {{ lecture.course_type }}</p>
                 <p class="rating">
                     평점:
                     <span class="stars">

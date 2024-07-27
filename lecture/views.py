@@ -3,17 +3,20 @@ from .models import Lecture, Review
 from .forms import ReviewForm
 from django.db.models import Q, Avg
 
+# lecture/views.py
+from django.shortcuts import render
+from .models import Lecture
+
 
 def lecture_room(request):
     query = request.GET.get('q')
     if query:
-        lectures = Lecture.objects.filter(
-            Q(course_name__icontains=query) | Q(professor__icontains=query)
-        )
+        lectures = Lecture.objects.filter(course_name__icontains=query) | Lecture.objects.filter(
+            professor__icontains=query)
     else:
         lectures = Lecture.objects.all()
-    context = {'lectures': lectures}
-    return render(request, 'lecture/lecture_room.html', context)
+
+    return render(request, 'lecture/lecture_room.html', {'lectures': lectures})
 
 
 def lecture_detail(request, lecture_id):

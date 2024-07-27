@@ -1,0 +1,79 @@
+﻿과목번호,과목명(국문),과목명(영문),인정교과구분,이수단계,학점/이론/실습,P/F,개설학기,주관학과
+21002103,객체지향프로그래밍(캡스톤디자인),OBJECT-ORIENTED PROGRAMMING,전공필수,2학년,3/3.0/0.0, ,1학기,인공지능공학부
+21102525,공학수학I,ENGINEERING MATHEMATICS Ⅰ,전공필수,1학년,3/3.0/0.0, ,2학기,인공지능공학부
+21105362,공학수학Ⅱ,ENGINEERING MATHEMATICS Ⅱ,전공필수,2학년,3/3.0/0.0, ,1학기,인공지능공학부
+21003066,데이터구조,DATA ORGANIZATION,전공필수,2학년,3/3.0/0.0, ,1학기,인공지능공학부
+21105282,오픈소스프로그래밍,OPEN SOURCE PROGRAMMING,전공필수,2학년,3/3.0/0.0, ,1학기,인공지능공학부
+21105365,웹프로그래밍,WEB PROGRAMMING,전공필수,2학년,3/3.0/0.0, ,2학기,인공지능공학부
+21102526,컴퓨터아키텍쳐,DEVICE ARCHITECTURE,전공필수,2학년,3/3.0/0.0, ,1학기,인공지능공학부
+21003683,프로그래밍방법론,PROGRAMMING METHODOLOGY,전공필수,1학년,3/3.0/0.0, ,2학기,인공지능공학부
+21102524,프로그래밍입문,INTRODUCTION TO COMPUTER PROGRAMMING,전공필수,1학년,3/3.0/0.0, ,1학기,인공지능공학부
+21102983,CAD및3D프린팅(캡스톤디자인),CAD FOR MECHANICAL ENGINEERING(CAPSTONE DESIGN),전공선택,1학년,3/2.0/2.0, ,1학기,기계시스템학부
+21102531,HCI개론(캡스톤디자인),INTRODUCTION TO HCI,전공선택,4학년,3/3.0/0.0, ,2학기,IT공학전공
+21102535,IOT응용(캡스톤디자인),IOT APPLICATION(CAPSTONE DESIGN),전공선택,4학년,3/3.0/0.0, ,1학기,IT공학전공
+21102533,IT소프트웨어공학,IT SOFTWARE ENGINEERING,전공선택,3학년,3/3.0/0.0, ,2학기,IT공학전공
+21102539,UI/UX설계,UI/UX DESIGN(CAPSTONE DESIGN),전공선택,3학년,3/2.0/2.0, ,1학기,IT공학전공
+21002460,가상및증강현실응용(캡스톤디자인),VR and AR APPLICATION,전공선택,3학년,3/3.0/0.0, ,2학기,IT공학전공
+21001083,경영정보시스템,MANEGEMENT INFORMATION SYSTEM,전공선택,2학년,3/3.0/0.0, ,모든학기,경영학부
+21021043,고급IT프로그래밍,ADVANCED IT PROGRAMMING,전공선택,석사,3/3.0/0.0, ,모든학기,IT공학과
+21102664,공정제어및설계,PROCESS CONTROL AND DESIGN,전공선택,4학년,3/3.0/0.0, ,1학기,화공생명공학부
+21102626,공학기초물리Ⅰ,ENGINEERING PHYSICS I,전공선택,1학년,3/3.0/0.0, ,1학기,화공생명공학부
+21102639,공학기초물리Ⅱ,ENGINEERING PHYSICS II,전공선택,1학년,3/3.0/0.0, ,2학기,화공생명공학부
+21102627,공학기초화학Ⅰ,ENGINEERING CHEMISTRY I,전공선택,1학년,3/3.0/0.0, ,1학기,화공생명공학부
+21102640,공학기초화학Ⅱ,ENGINEERING CHEMISTRY II,전공선택,1학년,3/3.0/0.0, ,2학기,화공생명공학부
+21103018,그린에너지시스템및실습,ENERGY SYSTEMS DESIGN,전공선택,4학년,3/2.0/2.0, ,1학기,기계시스템학부
+21104171,기계학습개론,INTRODUCTION TO MACHINE LEARNING,전공선택,2학년,3/3.0/0.0, ,1학기,지능형전자시스템전공
+21102668,기기분석화학및실험(캡스톤디자인),INSTRUMENTAL ANALYSIS AND EXPERIMENTS,전공선택,4학년,3/3.0/0.0, ,1학기,화공생명공학부
+21103533,기초회로실험,BASIC CIRCUIT LABORATORY(CAPSTONE DESIGN),전공선택,2학년,2/0.0/4.0, ,1학기,지능형전자시스템전공
+21100722,네트워크(캡스톤디자인),NETWORK,전공선택,3학년,3/3.0/0.0, ,2학기,IT공학전공
+21102977,네트워크프로토콜설계(캡스톤디자인),NETWORK PROTOCOL DESIGN,전공선택,4학년,3/3.0/0.0, ,1학기,지능형전자시스템전공
+21102962,논리회로,DIGITAL LOGIC DESIGN,전공선택,2학년,3/3.0/0.0, ,1학기,지능형전자시스템전공
+21102965,논리회로실험,PRACTICE IN DIGITAL LOGIC DESIGN,전공선택,2학년,2/0.0/4.0, ,2학기,지능형전자시스템전공
+21102538,데이터베이스,DATABASES,전공선택,2학년,3/3.0/0.0, ,2학기,인공지능공학부
+21102532,데이터분석및활용,DATA ANALYSIS AND APPLICATIONS,전공선택,4학년,3/3.0/0.0, ,2학기,IT공학전공
+21105363,데이터패턴인식,DATA PATTERN RECOGNITION,전공선택,3학년,3/3.0/0.0, ,1학기,인공지능공학부
+21103791,딥러닝,DEEP LEARNING,전공선택,2학년,3/2.0/2.0, ,1학기,기계시스템학부
+21103011,메카트로닉스이론및실습(캡스톤디자인),MECHATRONICS SYSTEM DESIGN(CAPSTONE DESIGN),전공선택,4학년,3/2.0/2.0, ,1학기,기계시스템학부
+21003076,모바일프로그래밍(캡스톤디자인),MOBILE PROGRAMMING,전공선택,2학년,3/2.0/2.0, ,2학기,인공지능공학부
+21102997,바이오미케닉스,INTRODUCTION TO BIOMECHANICS,전공선택,3학년,3/3.0/0.0, ,2학기,기계시스템학부
+21104553,반도체광전자공학,OPTOELECTRONICS,전공선택,3학년,3/3.0/0.0, ,2학기,지능형전자시스템전공
+21102990,빅데이터와수치해석입문및실습,INTRODUCTION TO NUMERICAL ANALYSIS FOR BIG DATA ANALYSIS,전공선택,2학년,3/2.0/2.0, ,2학기,기계시스템학부
+21102976,생체전자공학,BIO-ELECTRONIC ENGINEERING,전공선택,3학년,3/3.0/0.0, ,2학기,지능형전자시스템전공
+21102530,서버운영및보안,SERVER ADMINISTRATION AND SECURITY,전공선택,2학년,3/3.0/0.0, ,2학기,IT공학전공
+21000513,선형대수학,LINEAR ALGEBRA,전공선택,2학년,3/3.0/0.0, ,1학기,수학과
+21102529,센서프로그래밍,SENSOR PROGRAMMING,전공선택,3학년,3/2.0/2.0, ,2학기,IT공학전공
+21102537,스마트서비스(캡스톤디자인),SMART SERVICE,전공선택,4학년,3/3.0/0.0, ,1학기,IT공학전공
+21100720,알고리즘입문,ALGORITHMS,전공선택,2학년,3/3.0/0.0, ,2학기,인공지능공학부
+21102899,양자화학공학,QUANTUM CHEMICAL ENGINEERING,전공선택,3학년,3/3.0/0.0, ,1학기,화공생명공학부
+21002100,영상처리및응용,IMAGE PROCESSING AND ITS APPLICATIONS,전공선택,3학년,3/2.0/2.0, ,1학기,IT공학전공
+21003994,운영체제원리,OPERATING SYSTEMS PRINCIPLES,전공선택,3학년,3/3.0/0.0, ,2학기,IT공학전공
+21102659,유전체공학,GENOME ENGINEERING,전공선택,2학년,3/3.0/0.0, ,2학기,화공생명공학부
+21102993,융합캡스톤디자인(캡스톤디자인),MULTIDISCIPLINARY CAPSTONE DESIGN,전공선택,3학년,3/0.0/6.0, ,2학기,기계시스템학부
+21102631,이차전지공학,RECHARGEABLE BATTERY ENGINEERING,전공선택,4학년,3/3.0/0.0, ,1학기,화공생명공학부
+21102523,인공지능IT기술이해,INTRODUCTION TO IT FOR ARTIFICIAL INTELLIGENCE,전공선택,1학년,3/3.0/0.0, ,1학기,인공지능공학부
+21104552,인공지능과기계학습,ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING,전공선택,3학년,3/3.0/0.0, ,1학기,인공지능공학부
+21105164,인공지능과메타버스,ARTIFICIAL INTELLIGENCE AND METAVERSE,전공선택,석사,3/3.0/0.0, ,모든학기,IT공학과
+21104245,인공지능을위한공학수학,ENGINEERING MATHMATICS FOR AI,전공선택,석사,3/3.0/0.0, ,1학기,IT공학과
+21102980,인공지능을위한코딩입문및실습,BASICS AND PRACTICE OF COMPUTER PROGRAMMING FOR ARTIFICIAL INTELLIGENT,전공선택,1학년,3/2.0/2.0, ,2학기,기계시스템학부
+21105364,인공지능입문,INTRODUCTION TO ARTIFICIAL INTELLIGENCE,전공선택,2학년,3/3.0/0.0, ,2학기,인공지능공학부
+21102628,일반생명과학Ⅰ,GENERAL LIFE SCIENCE I,전공선택,1학년,3/3.0/0.0, ,1학기,화공생명공학부
+21102641,일반생명과학Ⅱ,GENERAL LIFE SCIENCE II,전공선택,1학년,3/3.0/0.0, ,2학기,화공생명공학부
+21003759,임베디드시스템,EMBEDDED SYSTEM,전공선택,3-4학년,3/2.0/2.0, ,1학기,컴퓨터과학전공(첨단)
+21103000,자동차공학개론,AUTOMOTIVE ENGINEERING,전공선택,3학년,3/3.0/0.0, ,1학기,기계시스템학부
+21103784,자동차와에너지,AUTOMOTIVE ENERGY,전공선택,3학년,3/3.0/0.0, ,2학기,기계시스템학부
+21102955,전자공학도를위한프로그래밍기초,PROGRAMMING BASICS FOR ELECTRONIC ENGINEERING,전공선택,1학년,3/2.0/2.0, ,2학기,지능형전자시스템전공
+21102635,전자재료공학,ELECTRONIC MATERIALS ENGINEERING,전공선택,3학년,3/3.0/0.0, ,1학기,화공생명공학부
+21003682,졸업프로젝트,PROJECT FOR GRADUATION(CAPSTONE DISIGN),전공선택,4학년,3/2.0/2.0,X,모든학기,IT공학전공
+21102974,지능형센서시스템,SENSOR SYSTEM ENGINEERING,전공선택,3학년,3/2.0/2.0, ,1학기,지능형전자시스템전공
+21102632,촉매공학,CATALYSIS ENGINEERING,전공선택,3학년,3/3.0/0.0, ,2학기,화공생명공학부
+21103318,친환경플라스틱응용제품디자인및개발(캡스톤디자인),DESIGN AND DEVELOPMENT OF ECO-FRIENDLY PLASTIC PRODUCTS(CAPSTONE DESIGN),전공선택,3-4학년,3/3.0/0.0, ,2학기,화공생명공학부
+21003680,컴퓨터그래픽프로그래밍,COMPUTER GRAPHIC PROGRAMMING,전공선택,3학년,3/3.0/0.0, ,1학기,IT공학전공
+21102528,컴퓨터비전,COMPUTER VISION,전공선택,4학년,3/2.0/2.0, ,2학기,IT공학전공
+21102534,클라우드컴퓨팅,CLOUD COMPUTING,전공선택,4학년,3/3.0/0.0, ,2학기,IT공학전공
+21102966,통신이론,COMMUNICATON THEORY,전공선택,3학년,3/3.0/0.0, ,1학기,지능형전자시스템전공
+21105229,파이썬데이터분석,PYTHON DATA ANALYTICS,전공선택,1학년,3/3.0/0.0, ,2학기,데이터사이언스전공
+21103313,학부연구(캡스톤디자인),UNDERGRADUATE RESEARCH(CAPSTONE DESIGN),전공선택,4학년,3/2.0/2.0, ,1학기,지능형전자시스템전공
+21105395,학생개설:지능형언어처리,INTELLIGENT LANGUAGE PROCESSING,전공선택,4학년,3/3.0/0.0, ,2학기,인공지능공학부
+21103790,헬스케어로보틱스(캡스톤디자인),HEALTHCARE ROBOTICS,전공선택,3학년,3/3.0/0.0, ,2학기,기계시스템학부
+21103783,헬스케어시스템디자인및실습,INTRODUCTION TO HEALTHCARE SYSTEMS,전공선택,3학년,3/3.0/0.0, ,1학기,기계시스템학부
+21103319,화공생명공학부진로탐색,CHEMICAL AND BIOLOGICAL ENGINEERING CAREER DEVELOPMENT,전공선택,3-4학년,3/3.0/0.0,X,2학기,화공생명공학부

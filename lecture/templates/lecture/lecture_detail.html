@@ -152,7 +152,9 @@
         <div class="left-section">
             <div class="lecture-detail">
                 <h2>{{ lecture.course_name }}</h2>
-                <p>교수명: {{ lecture.professor }}</p>
+                <p>과목 코드: {{ lecture.course_code }}</p>
+                <p>학점: {{ lecture.credits }}</p>
+                <p>설명: {{ lecture.summary }}</p>
                 <div class="stars">
                     {% for i in "12345" %}
                         <i class="fas fa-star{% if i > lecture.average_rating|stringformat:'d' %}-o{% endif %}"></i>
@@ -172,21 +174,39 @@
                     <span>과제:</span>
                     <div class="rating-summary">
                         <div class="rating-bar" style="width: 67%;"></div>
-                        <div class="rating-percentage">{{ reviews|length|divisibleby:total_reviews }}%</div>
+                        <div class="rating-percentage">
+                            {% if total_reviews > 0 %}
+                                {{ reviews|length|divisibleby:total_reviews }}%
+                            {% else %}
+                                0%
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
                 <div class="summary-item">
                     <span>조모임:</span>
                     <div class="rating-summary">
                         <div class="rating-bar" style="width: 13%;"></div>
-                        <div class="rating-percentage">{{ reviews|length|divisibleby:total_reviews }}%</div>
+                        <div class="rating-percentage">
+                            {% if total_reviews > 0 %}
+                                {{ reviews|length|divisibleby:total_reviews }}%
+                            {% else %}
+                                0%
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
                 <div class="summary-item">
                     <span>성적:</span>
                     <div class="rating-summary">
                         <div class="rating-bar" style="width: 100%;"></div>
-                        <div class="rating-percentage">{{ reviews|length|divisibleby:total_reviews }}%<</div>
+                        <div class="rating-percentage">
+                            {% if total_reviews > 0 %}
+                                {{ reviews|length|divisibleby:total_reviews }}%
+                            {% else %}
+                                0%
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
                 {% endwith %}

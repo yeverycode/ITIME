@@ -124,3 +124,18 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class Course(models.Model):
+    course_number = models.CharField(max_length=20)
+    course_name_ko = models.CharField(max_length=100)  # 수정할 필드 이름 확인
+    course_name_en = models.CharField(max_length=100)
+    course_type = models.CharField(max_length=50)
+    course_level = models.CharField(max_length=10)
+    credits = models.CharField(max_length=10)
+    pf = models.CharField(max_length=2, null=True, blank=True)
+    semester = models.CharField(max_length=10)
+    department = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.course_name_kr
