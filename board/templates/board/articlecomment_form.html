@@ -10,7 +10,7 @@
 <body>
     <div class="container mt-5">
         <h1>댓글 작성</h1>
-        <form method="post" action="{% url 'add_comment' post.id %}">
+        <form method="post" action="{% url 'add_comment' post.post_id %}">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-primary">댓글 달기</button>

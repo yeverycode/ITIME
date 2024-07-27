@@ -1,6 +1,6 @@
 # board/urls.py
 from django.urls import path
-from .views import Main, BoardDetailView, PostDetailView, CommentCreateView, CommentDeleteView, like_post, bookmark_post, BoardWriteView
+from .views import Main, BoardDetailView, PostDetailView, CommentCreateView, CommentDeleteView, like_post, bookmark_post, BoardWriteView, UserCommentsView
 
 urlpatterns = [
     path('main/', Main.as_view(), name='main'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('post/<int:post_id>/bookmark/', bookmark_post, name='bookmark_post'),
     path('post/<int:post_id>/comment/add/', CommentCreateView.as_view(), name='add_comment'),
     path('post/<int:post_id>/comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='delete_comment'),
+    path('user/comments/', UserCommentsView.as_view(), name='user_comments'),  # 추가된 URL 패턴
 ]

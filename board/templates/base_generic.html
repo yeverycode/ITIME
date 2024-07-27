@@ -1,0 +1,29 @@
+<!-- templates/base_generic.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Site{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>My Site</h1>
+        <!-- 여기에 공통 헤더 내용 추가 -->
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'main' %}">Home</a></li>
+            <li><a href="{% url 'user_comments' %}">내가 댓글 단 글</a></li>
+            <!-- 다른 네비게이션 항목 추가 -->
+        </ul>
+    </nav>
+    <div>
+        {% block content %}
+        <!-- 여기에 각 페이지의 내용이 삽입됩니다. -->
+        {% endblock %}
+    </div>
+    <footer>
+        <p>&copy; 2024 My Site</p>
+    </footer>
+</body>
+</html>

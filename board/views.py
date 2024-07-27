@@ -166,3 +166,40 @@ class CommentCreateView(CreateView):
         form.instance.is_anonymous = form.cleaned_data.get('anonymous', False)  # 익명 필드 설정
         form.save()
         return redirect('post_detail', post_id=self.kwargs['post_id'])
+
+# board/views.py
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
+
+class UserCommentsView(LoginRequiredMixin, ListView):
+    model = ArticleComment
+    template_name = 'board/user_comments.html'
+    context_object_name = 'comments'
+
+    def get_queryset(self):
+        # post가 None이 아닌 댓글만 필터링
+        return ArticleComment.objects.filter(user=self.request.user).exclude(post__isnull=True).select_related('post')
+
+
+# board/views.py
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from .models import PostBookmark
+
+
+@login_required
+def scrapped_posts(request):
+    scrapped_posts_list = PostBookmark.objects.filter(user=request.user).select_related('post').order_by('-created_at')
+    paginator = Paginator(scrapped_posts_list, 10)  # 한 페이지에 10개 게시글을 표시
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+    }
+
+    return render(request, 'board/scrap_list.html', context)
+
