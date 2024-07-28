@@ -114,6 +114,8 @@
             <div class="lecture">
                 <h3><a href="{% url 'lecture_detail' lecture.id %}">{{ lecture.course_name_ko }}</a></h3>
                 <p>교과구분: {{ lecture.course_type }}</p>
+                <p>이수학년: {{ lecture.level }}</p>
+                <p>개설학기: {{ lecture.semester }}</p>
                 <p class="rating">
                     평점:
                     <span class="stars">
@@ -127,7 +129,7 @@
                     </span>
                     ({{ lecture.average_rating|floatformat:1 }})
                 </p>
-                <p>{{ lecture.summary }}</p>
+
                 <div class="divider"></div>
             </div>
             {% endfor %}
