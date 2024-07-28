@@ -207,10 +207,22 @@
                 <h1>{{ post.title }}</h1>
                 <div class="text-muted mb-3">{{ post.created_at }} | {% if post.is_anonymous %}익명{% else %}{{ post.user.profile.nickname }}{% endif %}</div>
                 <p>{{ post.content }}</p>
+                {% if post.file %}
+                <div class="mt-3">
+                    <a href="{{ post.file.url }}" download>{{ post.file.name }}</a>
+                </div>
+                {% endif %}
                 <div class="post-interactions">
                     <div class="btn-group">
                         <a href="{% url 'like_post' post.id %}" class="btn btn-outline-primary">{{ is_liked|yesno:"좋아요 취소,좋아요" }} ({{ post.likes.count }})</a>
                         <a href="{% url 'bookmark_post' post.id %}" class="btn btn-outline-primary">{{ is_bookmarked|yesno:"북마크 취소,북마크" }} ({{ post.bookmarks.count }})</a>
+                        {% if post.user == request.user %}
+                            <a href="{% url 'post_edit' post.pk %}" class="btn btn-outline-secondary">수정</a>
+                            <form method="post" action="{% url 'post_delete' post.pk %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger">삭제</button>
+                            </form>
+                        {% endif %}
                     </div>
                     <a href="{% url 'board_detail' post.board.name %}" class="btn btn-outline-danger">글 목록</a>
                 </div>

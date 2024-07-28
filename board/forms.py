@@ -9,7 +9,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'content', 'anonymous']
+        fields = ['title', 'content', 'anonymous','file']
 
 from django import forms
 from .models import ArticleComment

@@ -86,6 +86,20 @@
             max-width: 100%;
             max-height: 100%;
         }
+        .post-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .post-actions a {
+            text-decoration: none;
+            color: white;
+            background-color: blue;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .post-actions a.delete {
+            background-color: red;
+        }
     </style>
 </head>
 <body>
@@ -96,6 +110,10 @@
         <div class="description">
             {{ board.description }}
         </div>
+        <form class="search-form" method="get" action="{% url 'search_results' %}">
+            <input type="text" name="q" placeholder="검색어를 입력하세요">
+            <button type="submit">검색</button>
+        </form>
         <div class="post-input">
             <a href="{% url 'board_write' board.name %}" class="icon">✎ 글쓰기</a>
         </div>
@@ -109,6 +127,10 @@
             </div>
             <div class="post-thumbnail">
                 <img src="https://via.placeholder.com/80" alt="thumbnail">
+            </div>
+            <div class="post-actions">
+                <a href="{% url 'post_edit' post.id %}" class="edit">수정</a>
+                <a href="{% url 'post_delete' post.id %}" class="delete">삭제</a>
             </div>
         </div>
         {% endfor %}

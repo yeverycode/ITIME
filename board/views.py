@@ -7,10 +7,12 @@ from .models import Post, Board, ArticleComment, LectureReview
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView
 from django.urls import reverse, reverse_lazy
-
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from .models import Post
 class Main(APIView):
     def get(self, request):
         feeds = Post.objects.all().order_by('-created_at')
@@ -203,3 +205,49 @@ def scrapped_posts(request):
 
     return render(request, 'board/scrap_list.html', context)
 
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView, DeleteView
+from .models import Post  # 사용 중인 Post 모델을 가져옵니다
+
+# Post 업데이트 뷰
+# Post 업데이트 뷰
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    fields = ['title', 'content', 'file', 'is_anonymous']
+    template_name = 'board/post_edit.html'
+    pk_url_kwarg = 'post_id'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'post_id': self.object.pk})
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.user
+
+# Post 삭제 뷰
+# Post 삭제 뷰
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    template_name = 'board/post_confirm_delete.html'
+    success_url = reverse_lazy('main')
+    pk_url_kwarg = 'post_id'
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.user
+
+from django.views.generic import ListView
+from .models import Post
+
+class SearchResultsView(ListView):
+    model = Post
+    template_name = 'board/search_results.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        return Post.objects.filter(content__icontains=query)

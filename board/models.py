@@ -59,6 +59,7 @@ class Post(models.Model):
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
     bookmarks = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='bookmarked_posts', blank=True)
     view_count = models.IntegerField(default=0)  # 추가된 view_count 필드
+    file = models.FileField(upload_to='uploads/', null=True, blank=True)  # 파일 필드 추가
 
     def __str__(self):
         return self.title
