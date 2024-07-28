@@ -131,6 +131,8 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/user/login/'  # 추가된 부분
+LOGOUT_REDIRECT_URL = '/user/login/'  # 로그아웃 후 리디렉션할 URL
+LOGIN_REDIRECT_URL = '/main/'
 
 APPEND_SLASH = True
 

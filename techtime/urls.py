@@ -1,4 +1,5 @@
-from django.urls import path, include
+from django.urls import path
+from django.contrib.auth import views as auth_views
 from .views import (
     Sub, Main, ProfileUpdateView, UploadProfile, LectureView,
     MessageSendView, MessageListView, ChatView, BoardDetailView
@@ -14,8 +15,10 @@ urlpatterns = [
     path('messages/send/', MessageSendView.as_view(), name='message_send'),
     path('messages/', MessageListView.as_view(), name='message_list'),
     path('chat/', ChatView.as_view(), name='chat'),
-    path('board/<str:board_name>/', BoardDetailView.as_view(), name='board_detail'),  # 게시판 상세 보기 URL
+    path('board/<str:board_name>/', BoardDetailView.as_view(), name='board_detail'),
     path('my_posts/', views.my_posts, name='my_posts'),
     path('my_scraps/', views.MyScrapsView.as_view(), name='my_scraps'),
     path('my_comments/', views.MyCommentsView.as_view(), name='my_comments'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),  # 로그아웃 URL 추가
+    path('login/', auth_views.LoginView.as_view(), name='login'),  # 로그인 URL 추가
 ]

@@ -75,7 +75,7 @@
                 <input type="password" class="form-control" id="input_password" name="password" placeholder="비밀번호">
                 <label for="input_password">비밀번호</label>
             </div>
-            <input type="hidden" name="next" value="{{ next }}">
+            <input type="hidden" name="next" value="{% url 'main' %}">
             <button type="submit" id="login_button" class="btn btn-custom">로그인</button>
         </form>
         <div class="additional-links">
