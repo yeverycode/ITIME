@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ITime</title>
     <style>
@@ -101,7 +102,23 @@
             padding: 10px;
             margin-bottom: 10px;
             cursor: pointer;
+            text-decoration: none;
         }
+
+        .nav-item .text{
+            text-decoration:none;
+            color: #000;
+        }
+
+        .nav-item .icon{
+            margin-right: 5px;
+        }
+
+        .custom-icon {
+            font-size: 15px; /* 크기 조절 */
+            color: #007bff; /* 색상 변경 */
+        }
+
 
         .nav-item:hover {
             background-color: #f0f0f0;
@@ -355,9 +372,18 @@
             </div>
         </div>
         <div class="nav-box">
-            <div class="nav-item"><a href="{% url 'my_posts' %}">내가 쓴 글</a></div>
-            <div class="nav-item"><a href="{% url 'user_comments' %}">댓글 단 글</a></div>
-            <div class="nav-item"><a href="{% url 'my_scraps' %}">내 스크랩</a></div>
+            <div class="nav-item">
+                <span class="icon"><i class="fas fa-pen custom-icon"></i></span>
+                <a class="text" href="{% url 'my_posts' %}">내가 쓴 글</a>
+                </div>
+            <div class="nav-item">
+                <span class="icon"><i class="fas fa-comments custom-icon"></i></span>
+                <a class="text" href="{% url 'user_comments' %}">댓글 단 글</a>
+                </div>
+            <div class="nav-item">
+                <span class="icon"><i class="fas fa-star custom-icon"></i></span>
+                <a class="text" href="{% url 'my_scraps' %}">스크랩 한 글</a>
+                </div>
         </div>
     </div>
     <div class="content">
