@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>스크랩한 글</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .scrap-list {
+            width: 60%;
+            margin: 0 auto;
+        }
+        .scrap-item {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .scrap-item h3 {
+            margin: 0;
+        }
+        .scrap-item p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .pagination {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .pagination a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #000;
+        }
+        .pagination a.active {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="scrap-list">
+        <h2>스크랩한 글</h2>
+        {% if page_obj %}
+            {% for bookmark in page_obj %}
+            <div class="scrap-item">
+                {% if bookmark.post %}
+                <h3><a href="{% url 'post_detail' bookmark.post.id %}">{{ bookmark.post.title }}</a></h3>
+                <p>{{ bookmark.post.created_at }} | {{ bookmark.post.user.profile.nickname }}</p>
+                {% else %}
+                <h3>삭제된 게시물입니다.</h3>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>스크랩한 글이 없습니다.</p>
+        {% endif %}
+
+        <!-- 페이지네이션 -->
+        {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">&laquo;</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <a href="?page={{ num }}" class="active">{{ num }}</a>
+            {% else %}
+            <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" aria-label="Next">&raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

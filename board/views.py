@@ -3,16 +3,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from rest_framework.views import APIView
 from django.http import JsonResponse, Http404
-from .models import Post, Board, ArticleComment, LectureReview
+from .models import Post, Board, ArticleComment, LectureReview, PostBookmark
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DeleteView, DetailView
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView, ListView
 from django.urls import reverse, reverse_lazy
-from django.urls import reverse_lazy
-from django.views.generic import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Post
+from django.core.paginator import Paginator
+from django.db.models import Count
 class Main(APIView):
     def get(self, request):
         feeds = Post.objects.all().order_by('-created_at')
@@ -182,29 +181,6 @@ class UserCommentsView(LoginRequiredMixin, ListView):
         # post가 None이 아닌 댓글만 필터링
         return ArticleComment.objects.filter(user=self.request.user).exclude(post__isnull=True).select_related('post')
 
-
-# board/views.py
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
-from .models import PostBookmark
-
-
-@login_required
-def scrapped_posts(request):
-    scrapped_posts_list = PostBookmark.objects.filter(user=request.user).select_related('post').order_by('-created_at')
-    paginator = Paginator(scrapped_posts_list, 10)  # 한 페이지에 10개 게시글을 표시
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        'page_obj': page_obj,
-        'is_paginated': page_obj.has_other_pages(),
-    }
-
-    return render(request, 'board/scrap_list.html', context)
-
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, DeleteView
 from .models import Post  # 사용 중인 Post 모델을 가져옵니다
@@ -251,3 +227,20 @@ class SearchResultsView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q')
         return Post.objects.filter(content__icontains=query)
+
+from .models import PostBookmark
+
+@login_required
+def scrapped_posts(request):
+    scrapped_posts_list = PostBookmark.objects.filter(user=request.user).select_related('post').order_by('-created_at')
+    paginator = Paginator(scrapped_posts_list, 10)  # 한 페이지에 10개 게시글을 표시
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+    }
+
+    return render(request, 'board/scrap_list.html', context)
