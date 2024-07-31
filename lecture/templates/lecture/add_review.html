@@ -126,6 +126,9 @@
             document.querySelectorAll('input[name="rating"]').forEach(star => {
                 star.addEventListener('change', updateRatingText);
             });
+            // 기본적으로 첫 번째 별 선택 및 텍스트 업데이트
+            document.getElementById('star5').checked = true;
+            updateRatingText();
         });
     </script>
 </head>
@@ -151,7 +154,7 @@
                 <input type="radio" name="rating" id="star5" value="5">
                 <label for="star5">★</label>
             </div>
-            <p class="rating-text">0/5</p>
+            <p class="rating-text">5/5</p>
             <textarea name="comment" placeholder="이 강의에 대한 총평을 작성해주세요."></textarea>
             <div class="questions">
                 <div class="homework-group">

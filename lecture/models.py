@@ -25,3 +25,4 @@ class Review(models.Model):
     grading = models.CharField(max_length=10, choices=[('generous', '너그러움'), ('average', '보통'), ('strict', '깐깐함')])
     attendance = models.CharField(max_length=10, choices=[('complex', '복합적'), ('direct', '직접호명'), ('designated', '지정좌석'), ('electronic', '전자출결'), ('none', '반영안함')])
     exams = models.CharField(max_length=10, choices=[('4_or_more', '네 번 이상'), ('3', '세 번'), ('2', '두 번'), ('1', '한 번'), ('none', '없음')])
+    created_at = models.DateTimeField(auto_now_add=True)

@@ -139,6 +139,37 @@
             color: #aaa;
             white-space: nowrap;
         }
+        .star-rating {
+            display: flex;
+            align-items: center;
+        }
+        .star-rating .stars {
+            color: #ffa500;
+        }
+        .star-rating .star-bar {
+            height: 10px;
+            background-color: #ffa500;
+            border-radius: 5px;
+            margin-left: 10px;
+            flex: 1;
+        }
+        .star-rating .star-percentage {
+            margin-left: 10px;
+            color: #aaa;
+            white-space: nowrap;
+        }
+        .average-rating {
+            display: flex;align-items: center;
+        }
+.average-rating .stars {
+    margin-left: 10px;
+    color: #ffa500;
+}
+.average-rating span {
+    margin-left: 10px;
+    color: #fff;
+}
+
     </style>
 </head>
 <body>
@@ -168,7 +199,33 @@
         </div>
         <div class="right-section">
             <div class="summary">
-                <h3>요약</h3>
+                <h3>별점</h3>
+                <div class="star-rating">
+                    <span>⭐ 5</span>
+                    <div class="star-bar width-{{ star_percentages.5|floatformat:0 }}"></div>
+                    <div class="star-percentage">{{ star_percentages.5|floatformat:0 }}%</div>
+                </div>
+                <div class="star-rating">
+                    <span>⭐ 4</span>
+                    <div class="star-bar width-{{ star_percentages.4|floatformat:0 }}"></div>
+                    <div class="star-percentage">{{ star_percentages.4|floatformat:0 }}%</div>
+                </div>
+                <div class="star-rating">
+                    <span>⭐ 3</span>
+                    <div class="star-bar width-{{ star_percentages.3|floatformat:0 }}"></div>
+                    <div class="star-percentage">{{ star_percentages.3|floatformat:0 }}%</div>
+                </div>
+                <div class="star-rating">
+                    <span>⭐ 2</span>
+                    <div class="star-bar width-{{ star_percentages.2|floatformat:0 }}"></div>
+                    <div class="star-percentage">{{ star_percentages.2|floatformat:0 }}%</div>
+                </div>
+                <div class="star-rating">
+                    <span>⭐ 1</span>
+                    <div class="star-bar width-{{ star_percentages.1|floatformat:0 }}"></div>
+                    <div class="star-percentage">{{ star_percentages.1|floatformat:0 }}%</div>
+                </div>
+                <h3></h3>
                 <div class="summary-item">
                     <span>과제:</span>
                     <div class="rating-summary">

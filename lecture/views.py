@@ -88,9 +88,14 @@ def submit_review(request):
     return redirect('lecture_room')
 
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Lecture, Review
-from django.db.models import Count
+from django.db.models import Count, Avg
+from django.http import HttpResponseBadRequest
+
+
+def calculate_percentage(count, total):
+    return (count / total) * 100 if total > 0 else 0
 
 
 def lecture_detail(request, lecture_id):
@@ -98,12 +103,10 @@ def lecture_detail(request, lecture_id):
     reviews = Review.objects.filter(lecture=lecture)
 
     total_reviews = reviews.count()
+    average_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0
 
-    def calculate_percentage(count, total):
-        return (count / total) * 100 if total > 0 else 0
-
-    def get_css_class(percentage):
-        return f"width-{int(percentage // 10) * 10}"
+    star_counts = reviews.values('rating').annotate(count=Count('rating')).order_by('-rating')
+    star_percentages = {item['rating']: calculate_percentage(item['count'], total_reviews) for item in star_counts}
 
     homework_stats = reviews.values('homework').annotate(count=Count('homework'))
     groupwork_stats = reviews.values('groupwork').annotate(count=Count('groupwork'))
@@ -111,30 +114,59 @@ def lecture_detail(request, lecture_id):
     attendance_stats = reviews.values('attendance').annotate(count=Count('attendance'))
     exams_stats = reviews.values('exams').annotate(count=Count('exams'))
 
+    homework_percentages = {item['homework']: calculate_percentage(item['count'], total_reviews) for item in
+                            homework_stats}
+    groupwork_percentages = {item['groupwork']: calculate_percentage(item['count'], total_reviews) for item in
+                             groupwork_stats}
+    grading_percentages = {item['grading']: calculate_percentage(item['count'], total_reviews) for item in
+                           grading_stats}
+    attendance_percentages = {item['attendance']: calculate_percentage(item['count'], total_reviews) for item in
+                              attendance_stats}
+    exams_percentages = {item['exams']: calculate_percentage(item['count'], total_reviews) for item in exams_stats}
+
     context = {
         'lecture': lecture,
         'reviews': reviews,
         'total_reviews': total_reviews,
-        'homework_stats': {item['homework']: get_css_class(calculate_percentage(item['count'], total_reviews)) for item
-                           in homework_stats},
-        'groupwork_stats': {item['groupwork']: get_css_class(calculate_percentage(item['count'], total_reviews)) for
-                            item in groupwork_stats},
-        'grading_stats': {item['grading']: get_css_class(calculate_percentage(item['count'], total_reviews)) for item in
-                          grading_stats},
-        'attendance_stats': {item['attendance']: get_css_class(calculate_percentage(item['count'], total_reviews)) for
-                             item in attendance_stats},
-        'exams_stats': {item['exams']: get_css_class(calculate_percentage(item['count'], total_reviews)) for item in
-                        exams_stats},
-        'homework_percentages': {item['homework']: calculate_percentage(item['count'], total_reviews) for item in
-                                 homework_stats},
-        'groupwork_percentages': {item['groupwork']: calculate_percentage(item['count'], total_reviews) for item in
-                                  groupwork_stats},
-        'grading_percentages': {item['grading']: calculate_percentage(item['count'], total_reviews) for item in
-                                grading_stats},
-        'attendance_percentages': {item['attendance']: calculate_percentage(item['count'], total_reviews) for item in
-                                   attendance_stats},
-        'exams_percentages': {item['exams']: calculate_percentage(item['count'], total_reviews) for item in
-                              exams_stats},
+        'average_rating': average_rating,
+        'star_percentages': star_percentages,
+        'homework_percentages': homework_percentages,
+        'groupwork_percentages': groupwork_percentages,
+        'grading_percentages': grading_percentages,
+        'attendance_percentages': attendance_percentages,
+        'exams_percentages': exams_percentages,
     }
 
     return render(request, 'lecture/lecture_detail.html', context)
+
+
+def submit_review(request):
+    if request.method == 'POST':
+        lecture_id = request.POST.get('lecture_id')
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+        homework = request.POST.get('homework')
+        groupwork = request.POST.get('groupwork')
+        grading = request.POST.get('grading')
+        attendance = request.POST.get('attendance')
+        exams = request.POST.get('exams')
+
+        if not (lecture_id and rating):
+            return HttpResponseBadRequest("Lecture ID and rating are required.")
+
+        lecture = get_object_or_404(Lecture, id=lecture_id)
+
+        review = Review(
+            lecture=lecture,
+            rating=rating,
+            comment=comment,
+            homework=homework,
+            groupwork=groupwork,
+            grading=grading,
+            attendance=attendance,
+            exams=exams
+        )
+        review.save()
+
+        return redirect('lecture_detail', lecture_id=lecture.id)
+    return HttpResponseBadRequest("Invalid request method.")

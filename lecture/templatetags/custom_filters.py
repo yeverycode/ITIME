@@ -9,3 +9,7 @@ def to_int(value):
     except ValueError:
         return 0  # 또는 원하는 기본값
 
+@register.filter(name='mul')
+def mul(value, arg):
+    return float(value) * float(arg)
+
