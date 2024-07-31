@@ -87,8 +87,11 @@ def submit_review(request):
         return redirect('lecture_detail', lecture_id=lecture.id)
     return redirect('lecture_room')
 
+
 from django.shortcuts import render, get_object_or_404
 from .models import Lecture, Review
+from django.db.models import Count
+
 
 def lecture_detail(request, lecture_id):
     lecture = get_object_or_404(Lecture, pk=lecture_id)
@@ -96,32 +99,42 @@ def lecture_detail(request, lecture_id):
 
     total_reviews = reviews.count()
 
-    def calculate_percentage(count):
-        return (count / total_reviews) * 100 if total_reviews > 0 else 0
+    def calculate_percentage(count, total):
+        return (count / total) * 100 if total > 0 else 0
+
+    def get_css_class(percentage):
+        return f"width-{int(percentage // 10) * 10}"
+
+    homework_stats = reviews.values('homework').annotate(count=Count('homework'))
+    groupwork_stats = reviews.values('groupwork').annotate(count=Count('groupwork'))
+    grading_stats = reviews.values('grading').annotate(count=Count('grading'))
+    attendance_stats = reviews.values('attendance').annotate(count=Count('attendance'))
+    exams_stats = reviews.values('exams').annotate(count=Count('exams'))
 
     context = {
         'lecture': lecture,
-        'total_reviews': total_reviews,
-        'no_homework_percentage': calculate_percentage(reviews.filter(homework='없음').count()),
-        'average_homework_percentage': calculate_percentage(reviews.filter(homework='보통').count()),
-        'many_homework_percentage': calculate_percentage(reviews.filter(homework='많음').count()),
-        'no_groupwork_percentage': calculate_percentage(reviews.filter(groupwork='없음').count()),
-        'average_groupwork_percentage': calculate_percentage(reviews.filter(groupwork='보통').count()),
-        'many_groupwork_percentage': calculate_percentage(reviews.filter(groupwork='많음').count()),
-        'generous_grading_percentage': calculate_percentage(reviews.filter(grading='너그러움').count()),
-        'average_grading_percentage': calculate_percentage(reviews.filter(grading='보통').count()),
-        'strict_grading_percentage': calculate_percentage(reviews.filter(grading='깐깐함').count()),
-        'complex_attendance_percentage': calculate_percentage(reviews.filter(attendance='복합적').count()),
-        'direct_attendance_percentage': calculate_percentage(reviews.filter(attendance='직접호명').count()),
-        'designated_seating_percentage': calculate_percentage(reviews.filter(attendance='지정좌석').count()),
-        'electronic_attendance_percentage': calculate_percentage(reviews.filter(attendance='전자출결').count()),
-        'no_attendance_percentage': calculate_percentage(reviews.filter(attendance='반영안함').count()),
-        'four_or_more_exams_percentage': calculate_percentage(reviews.filter(exams='네 번 이상').count()),
-        'three_exams_percentage': calculate_percentage(reviews.filter(exams='세 번').count()),
-        'two_exams_percentage': calculate_percentage(reviews.filter(exams='두 번').count()),
-        'one_exam_percentage': calculate_percentage(reviews.filter(exams='한 번').count()),
-        'no_exams_percentage': calculate_percentage(reviews.filter(exams='없음').count()),
         'reviews': reviews,
+        'total_reviews': total_reviews,
+        'homework_stats': {item['homework']: get_css_class(calculate_percentage(item['count'], total_reviews)) for item
+                           in homework_stats},
+        'groupwork_stats': {item['groupwork']: get_css_class(calculate_percentage(item['count'], total_reviews)) for
+                            item in groupwork_stats},
+        'grading_stats': {item['grading']: get_css_class(calculate_percentage(item['count'], total_reviews)) for item in
+                          grading_stats},
+        'attendance_stats': {item['attendance']: get_css_class(calculate_percentage(item['count'], total_reviews)) for
+                             item in attendance_stats},
+        'exams_stats': {item['exams']: get_css_class(calculate_percentage(item['count'], total_reviews)) for item in
+                        exams_stats},
+        'homework_percentages': {item['homework']: calculate_percentage(item['count'], total_reviews) for item in
+                                 homework_stats},
+        'groupwork_percentages': {item['groupwork']: calculate_percentage(item['count'], total_reviews) for item in
+                                  groupwork_stats},
+        'grading_percentages': {item['grading']: calculate_percentage(item['count'], total_reviews) for item in
+                                grading_stats},
+        'attendance_percentages': {item['attendance']: calculate_percentage(item['count'], total_reviews) for item in
+                                   attendance_stats},
+        'exams_percentages': {item['exams']: calculate_percentage(item['count'], total_reviews) for item in
+                              exams_stats},
     }
 
     return render(request, 'lecture/lecture_detail.html', context)

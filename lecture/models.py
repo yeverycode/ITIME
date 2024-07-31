@@ -17,15 +17,11 @@ class Lecture(models.Model):
         return self.course_name_ko
 
 class Review(models.Model):
-    lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE)
-    rating = models.IntegerField(default=5)
-    comment = models.TextField(default="No comment")
-    homework = models.CharField(max_length=10, default='N/A')
-    groupwork = models.CharField(max_length=10, default='N/A')
-    grading = models.CharField(max_length=10, default='N/A')
-    attendance = models.CharField(max_length=20, default='N/A')
-    exams = models.CharField(max_length=20, default='N/A')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'{self.rating} - {self.lecture.course_name_ko}'
+    lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
+    comment = models.TextField()
+    homework = models.CharField(max_length=10, choices=[('many', '많음'), ('average', '보통'), ('none', '없음')])
+    groupwork = models.CharField(max_length=10, choices=[('many', '많음'), ('average', '보통'), ('none', '없음')])
+    grading = models.CharField(max_length=10, choices=[('generous', '너그러움'), ('average', '보통'), ('strict', '깐깐함')])
+    attendance = models.CharField(max_length=10, choices=[('complex', '복합적'), ('direct', '직접호명'), ('designated', '지정좌석'), ('electronic', '전자출결'), ('none', '반영안함')])
+    exams = models.CharField(max_length=10, choices=[('4_or_more', '네 번 이상'), ('3', '세 번'), ('2', '두 번'), ('1', '한 번'), ('none', '없음')])

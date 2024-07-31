@@ -127,16 +127,17 @@
             align-items: center;
             margin-top: 10px;
         }
-        .rating-summary .rating-bar {
+        .rating-bar {
             height: 10px;
             background-color: #ffa500;
             border-radius: 5px;
             margin-left: 10px;
             flex: 1;
         }
-        .rating-summary .rating-percentage {
+        .rating-percentage {
             margin-left: 10px;
             color: #aaa;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -168,47 +169,97 @@
         <div class="right-section">
             <div class="summary">
                 <h3>요약</h3>
-                {% with total_reviews=reviews.count %}
                 <div class="summary-item">
                     <span>과제:</span>
                     <div class="rating-summary">
-                        <div class="rating-bar" style="width: 67%;"></div>
-                        <div class="rating-percentage">
-                            {% if total_reviews > 0 %}
-                                {{ reviews|length|divisibleby:total_reviews }}%
-                            {% else %}
-                                0%
-                            {% endif %}
-                        </div>
+                        <div class="rating-bar {{ homework_stats.none }}"></div>
+                        <div class="rating-percentage">없음: {{ homework_percentages.none|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ homework_stats.average }}"></div>
+                        <div class="rating-percentage">보통: {{ homework_percentages.average|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ homework_stats.many }}"></div>
+                        <div class="rating-percentage">많음: {{ homework_percentages.many|floatformat:0 }}%</div>
                     </div>
                 </div>
                 <div class="summary-item">
                     <span>조모임:</span>
                     <div class="rating-summary">
-                        <div class="rating-bar" style="width: 13%;"></div>
-                        <div class="rating-percentage">
-                            {% if total_reviews > 0 %}
-                                {{ reviews|length|divisibleby:total_reviews }}%
-                            {% else %}
-                                0%
-                            {% endif %}
-                        </div>
+                        <div class="rating-bar {{ groupwork_stats.none }}"></div>
+                        <div class="rating-percentage">없음: {{ groupwork_percentages.none|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ groupwork_stats.average }}"></div>
+                        <div class="rating-percentage">보통: {{ groupwork_percentages.average|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ groupwork_stats.many }}"></div>
+                        <div class="rating-percentage">많음: {{ groupwork_percentages.many|floatformat:0 }}%</div>
                     </div>
                 </div>
                 <div class="summary-item">
                     <span>성적:</span>
                     <div class="rating-summary">
-                        <div class="rating-bar" style="width: 100%;"></div>
-                        <div class="rating-percentage">
-                            {% if total_reviews > 0 %}
-                                {{ reviews|length|divisibleby:total_reviews }}%
-                            {% else %}
-                                0%
-                            {% endif %}
-                        </div>
+                        <div class="rating-bar {{ grading_stats.generous }}"></div>
+                        <div class="rating-percentage">너그러움: {{ grading_percentages.generous|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ grading_stats.average }}"></div>
+                        <div class="rating-percentage">보통: {{ grading_percentages.average|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ grading_stats.strict }}"></div>
+                        <div class="rating-percentage">깐깐함: {{ grading_percentages.strict|floatformat:0 }}%</div>
                     </div>
                 </div>
-                {% endwith %}
+                <div class="summary-item">
+                    <span>출석:</span>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ attendance_stats.complex }}"></div>
+                        <div class="rating-percentage">복합적: {{ attendance_percentages.complex|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ attendance_stats.direct }}"></div>
+                        <div class="rating-percentage">직접호명: {{ attendance_percentages.direct|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ attendance_stats.designated }}"></div>
+                        <div class="rating-percentage">지정좌석: {{ attendance_percentages.designated|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ attendance_stats.electronic }}"></div>
+                        <div class="rating-percentage">전자출결: {{ attendance_percentages.electronic|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ attendance_stats.none }}"></div>
+                        <div class="rating-percentage">반영안함: {{ attendance_percentages.none|floatformat:0 }}%</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <span>시험:</span>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ exams_stats.4_or_more }}"></div>
+                        <div class="rating-percentage">네 번 이상: {{ exams_percentages.4_or_more|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ exams_stats.3 }}"></div>
+                        <div class="rating-percentage">세 번: {{ exams_percentages.3|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ exams_stats.2 }}"></div>
+                        <div class="rating-percentage">두 번: {{ exams_percentages.2|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ exams_stats.1 }}"></div>
+                        <div class="rating-percentage">한 번: {{ exams_percentages.1|floatformat:0 }}%</div>
+                    </div>
+                    <div class="rating-summary">
+                        <div class="rating-bar {{ exams_stats.none }}"></div>
+                        <div class="rating-percentage">없음: {{ exams_percentages.none|floatformat:0 }}%</div>
+                    </div>
+                </div>
             </div>
             <div class="review-list">
                 <h3>강의평</h3>
