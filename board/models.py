@@ -28,14 +28,6 @@ class Reply(models.Model):
     def __str__(self):
         return f"Reply by {self.email} on {self.feed}"
 
-class Bookmark(models.Model):
-    feed = models.ForeignKey(Feed, on_delete=models.CASCADE, related_name='bookmarks')
-    email = models.EmailField(default='')
-    is_marked = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)  # 생성 시간
-
-    def __str__(self):
-        return f"{self.email} bookmarked {self.feed}"
 
 class Board(models.Model):
     name = models.CharField(max_length=255)
@@ -58,6 +50,7 @@ class Post(models.Model):
     is_anonymous = models.BooleanField(default=False)  # 익명 필드 추가
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_posts', blank=True)
     bookmarks = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='bookmarked_posts', blank=True)
+    bookmark_count = models.PositiveIntegerField(default=0)  # 스크랩 카운트 필드
     view_count = models.IntegerField(default=0)  # 추가된 view_count 필드
     file = models.FileField(upload_to='uploads/', null=True, blank=True)  # 파일 필드 추가
 

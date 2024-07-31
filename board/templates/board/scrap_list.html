@@ -44,7 +44,7 @@
             {% for bookmark in page_obj %}
             <div class="scrap-item">
                 {% if bookmark.post %}
-                <h3><a href="{% url 'post_detail' bookmark.post.id %}">{{ bookmark.post.title }}</a></h3>
+                <h3><a href="{% url 'post_detail' post_id=bookmark.post.id %}">{{ bookmark.post.title }}</a></h3>
                 <p>{{ bookmark.post.created_at }} | {{ bookmark.post.user.profile.nickname }}</p>
                 {% else %}
                 <h3>삭제된 게시물입니다.</h3>

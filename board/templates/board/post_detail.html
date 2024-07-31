@@ -215,7 +215,7 @@
                 <div class="post-interactions">
                     <div class="btn-group">
                         <a href="{% url 'like_post' post.id %}" class="btn btn-outline-primary">{{ is_liked|yesno:"좋아요 취소,좋아요" }} ({{ post.likes.count }})</a>
-                        <a href="{% url 'bookmark_post' post.id %}" class="btn btn-outline-primary">{{ is_bookmarked|yesno:"북마크 취소,북마크" }} ({{ post.bookmarks.count }})</a>
+                        <a href="{% url 'bookmark_post' post.id %}" class="btn btn-outline-primary">{{ is_bookmarked|yesno:"스크랩 취소,스크랩" }} ({{  bookmark_count}})</a>
                         {% if post.user == request.user %}
                             <a href="{% url 'post_edit' post.pk %}" class="btn btn-outline-secondary">수정</a>
                             <form method="post" action="{% url 'post_delete' post.pk %}" style="display:inline;">

@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     Main, BoardDetailView, PostDetailView, CommentCreateView,
     CommentDeleteView, like_post, bookmark_post, BoardWriteView,
-    UserCommentsView, PostUpdateView, PostDeleteView, SearchResultsView, scrapped_posts  # 추가된 부분
+    UserCommentsView, PostUpdateView, PostDeleteView, SearchResultsView, scrapped_posts
 )
 
 urlpatterns = [
@@ -15,8 +15,8 @@ urlpatterns = [
     path('post/<int:post_id>/comment/add/', CommentCreateView.as_view(), name='add_comment'),
     path('post/<int:post_id>/comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='delete_comment'),
     path('user/comments/', UserCommentsView.as_view(), name='user_comments'),
-    path('user/scrapped_posts/', scrapped_posts, name='scrapped_posts'),  # 스크랩한 글 URL 추가
-    path('post/<int:pk>/edit/', PostUpdateView.as_view(), name='post_edit'),
-    path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post_delete'),
+    path('user/scrapped_posts/', scrapped_posts, name='scrapped_posts'),
+    path('post/<int:post_id>/edit/', PostUpdateView.as_view(), name='post_edit'),
+    path('post/<int:post_id>/delete/', PostDeleteView.as_view(), name='post_delete'),
     path('search/', SearchResultsView.as_view(), name='search_results'),
 ]

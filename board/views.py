@@ -95,6 +95,7 @@ class PostDetailView(DetailView):
         context['comment_form'] = CommentForm()
         context['is_liked'] = post.likes.filter(id=self.request.user.id).exists()
         context['is_bookmarked'] = post.bookmarks.filter(id=self.request.user.id).exists()
+        context['bookmark_count'] = PostBookmark.objects.filter(post=post).count()  # 스크랩 카운트 추가
 
         # 실시간 인기 글: 가장 많은 좋아요를 받은 게시물 (3개)
         context['popular_posts'] = Post.objects.annotate(like_count=Count('likes')).order_by('-like_count')[:3]
@@ -122,13 +123,21 @@ def like_post(request, post_id):
 @login_required
 def bookmark_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    if request.user in post.bookmarks.all():
-        post.bookmarks.remove(request.user)
-        bookmarked = False
+    bookmark, created = PostBookmark.objects.get_or_create(user=request.user, post=post)
+
+    if not created:
+        # 이미 북마크가 존재하는 경우 삭제
+        bookmark.delete()
+        is_bookmarked = False
     else:
-        post.bookmarks.add(request.user)
-        bookmarked = True
-    return JsonResponse({'bookmarked': bookmarked, 'bookmark_count': post.bookmarks.count()})
+        # 북마크가 새로 생성된 경우
+        is_bookmarked = True
+
+    # bookmark_count를 PostBookmark 모델에서 직접 계산
+    bookmark_count = PostBookmark.objects.filter(post=post).count()
+
+    return JsonResponse({'bookmarked': is_bookmarked, 'bookmark_count': bookmark_count})
+
 
 class CommentCreateView(CreateView):
     model = ArticleComment
