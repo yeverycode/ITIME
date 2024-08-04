@@ -28,7 +28,6 @@ class Reply(models.Model):
     def __str__(self):
         return f"Reply by {self.email} on {self.feed}"
 
-
 class Board(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -67,6 +66,7 @@ class ArticleComment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_anonymous = models.BooleanField(default=False)  # 익명 여부 필드 추가
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         if self.is_anonymous:

@@ -253,3 +253,31 @@ def scrapped_posts(request):
     }
 
     return render(request, 'board/scrap_list.html', context)
+
+# views.py
+@login_required
+def add_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
+            comment.save()
+            return redirect('post_detail', post_id=post.id)
+    else:
+        form = CommentForm()
+    return render(request, 'board/post_detail.html', {'post': post, 'form': form, 'comments': post.comments.filter(parent__isnull=True)})
+
+@login_required
+def delete_comment(request, post_id, comment_id):
+    comment = get_object_or_404(ArticleComment, id=comment_id, user=request.user)
+    comment.delete()
+    return redirect('post_detail', post_id=post_id)
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    comments = post.comments.filter(parent__isnull=True)
+    form = CommentForm()
+    return render(request, 'board/post_detail.html', {'post': post, 'comments': comments, 'form': form})
