@@ -65,7 +65,7 @@
             margin-top: 20px;
         }
         .questions div {
-            margin-bottom: 10px;
+            margin-bottom: 20px; /* 질문 사이의 간격을 20px로 설정 */
         }
         .questions label {
             display: block;
@@ -104,6 +104,10 @@
         }
         .submit-button:hover {
             background-color: #cc0000;
+        }
+        .questions .radio-options {
+            display: flex; /* 가로 나열을 위한 flexbox 설정 */
+            gap: 10px; /* 버튼 사이 간격을 설정 */
         }
     </style>
     <script>
@@ -159,56 +163,66 @@
             <div class="questions">
                 <div class="homework-group">
                     <label>과제가 많은가요?</label>
-                    <input type="radio" name="homework" id="homework1" value="many">
-                    <label for="homework1"><span id="label-homework1" onclick="highlightSelected('homework-group', 'label-homework1')">많음</span></label>
-                    <input type="radio" name="homework" id="homework2" value="average">
-                    <label for="homework2"><span id="label-homework2" onclick="highlightSelected('homework-group', 'label-homework2')">보통</span></label>
-                    <input type="radio" name="homework" id="homework3" value="none">
-                    <label for="homework3"><span id="label-homework3" onclick="highlightSelected('homework-group', 'label-homework3')">없음</span></label>
+                    <div class="radio-options">
+                        <input type="radio" name="homework" id="homework1" value="many">
+                        <label for="homework1"><span id="label-homework1" onclick="highlightSelected('homework-group', 'label-homework1')">많음</span></label>
+                        <input type="radio" name="homework" id="homework2" value="average">
+                        <label for="homework2"><span id="label-homework2" onclick="highlightSelected('homework-group', 'label-homework2')">보통</span></label>
+                        <input type="radio" name="homework" id="homework3" value="none">
+                        <label for="homework3"><span id="label-homework3" onclick="highlightSelected('homework-group', 'label-homework3')">없음</span></label>
+                    </div>
                 </div>
                 <div class="groupwork-group">
                     <label>조모임이 많은가요?</label>
-                    <input type="radio" name="groupwork" id="groupwork1" value="many">
-                    <label for="groupwork1"><span id="label-groupwork1" onclick="highlightSelected('groupwork-group', 'label-groupwork1')">많음</span></label>
-                    <input type="radio" name="groupwork" id="groupwork2" value="average">
-                    <label for="groupwork2"><span id="label-groupwork2" onclick="highlightSelected('groupwork-group', 'label-groupwork2')">보통</span></label>
-                    <input type="radio" name="groupwork" id="groupwork3" value="none">
-                    <label for="groupwork3"><span id="label-groupwork3" onclick="highlightSelected('groupwork-group', 'label-groupwork3')">없음</span></label>
+                    <div class="radio-options">
+                        <input type="radio" name="groupwork" id="groupwork1" value="many">
+                        <label for="groupwork1"><span id="label-groupwork1" onclick="highlightSelected('groupwork-group', 'label-groupwork1')">많음</span></label>
+                        <input type="radio" name="groupwork" id="groupwork2" value="average">
+                        <label for="groupwork2"><span id="label-groupwork2" onclick="highlightSelected('groupwork-group', 'label-groupwork2')">보통</span></label>
+                        <input type="radio" name="groupwork" id="groupwork3" value="none">
+                        <label for="groupwork3"><span id="label-groupwork3" onclick="highlightSelected('groupwork-group', 'label-groupwork3')">없음</span></label>
+                    </div>
                 </div>
                 <div class="grading-group">
                     <label>성적은 어떻게 주시나요?</label>
-                    <input type="radio" name="grading" id="grading1" value="generous">
-                    <label for="grading1"><span id="label-grading1" onclick="highlightSelected('grading-group', 'label-grading1')">너그러움</span></label>
-                    <input type="radio" name="grading" id="grading2" value="average">
-                    <label for="grading2"><span id="label-grading2" onclick="highlightSelected('grading-group', 'label-grading2')">보통</span></label>
-                    <input type="radio" name="grading" id="grading3" value="strict">
-                    <label for="grading3"><span id="label-grading3" onclick="highlightSelected('grading-group', 'label-grading3')">깐깐함</span></label>
+                    <div class="radio-options">
+                        <input type="radio" name="grading" id="grading1" value="generous">
+                        <label for="grading1"><span id="label-grading1" onclick="highlightSelected('grading-group', 'label-grading1')">너그러움</span></label>
+                        <input type="radio" name="grading" id="grading2" value="average">
+                        <label for="grading2"><span id="label-grading2" onclick="highlightSelected('grading-group', 'label-grading2')">보통</span></label>
+                        <input type="radio" name="grading" id="grading3" value="strict">
+                        <label for="grading3"><span id="label-grading3" onclick="highlightSelected('grading-group', 'label-grading3')">깐깐함</span></label>
+                    </div>
                 </div>
                 <div class="attendance-group">
                     <label>출석은 어떻게 확인하나요?</label>
-                    <input type="radio" name="attendance" id="attendance1" value="complex">
-                    <label for="attendance1"><span id="label-attendance1" onclick="highlightSelected('attendance-group', 'label-attendance1')">복합적</span></label>
-                    <input type="radio" name="attendance" id="attendance2" value="direct">
-                    <label for="attendance2"><span id="label-attendance2" onclick="highlightSelected('attendance-group', 'label-attendance2')">직접호명</span></label>
-                    <input type="radio" name="attendance" id="attendance3" value="designated">
-                    <label for="attendance3"><span id="label-attendance3" onclick="highlightSelected('attendance-group', 'label-attendance3')">지정좌석</span></label>
-                    <input type="radio" name="attendance" id="attendance4" value="electronic">
-                    <label for="attendance4"><span id="label-attendance4" onclick="highlightSelected('attendance-group', 'label-attendance4')">전자출결</span></label>
-                    <input type="radio" name="attendance" id="attendance5" value="none">
-                    <label for="attendance5"><span id="label-attendance5" onclick="highlightSelected('attendance-group', 'label-attendance5')">반영안함</span></label>
+                    <div class="radio-options">
+                        <input type="radio" name="attendance" id="attendance1" value="complex">
+                        <label for="attendance1"><span id="label-attendance1" onclick="highlightSelected('attendance-group', 'label-attendance1')">복합적</span></label>
+                        <input type="radio" name="attendance" id="attendance2" value="direct">
+                        <label for="attendance2"><span id="label-attendance2" onclick="highlightSelected('attendance-group', 'label-attendance2')">직접호명</span></label>
+                        <input type="radio" name="attendance" id="attendance3" value="designated">
+                        <label for="attendance3"><span id="label-attendance3" onclick="highlightSelected('attendance-group', 'label-attendance3')">지정좌석</span></label>
+                        <input type="radio" name="attendance" id="attendance4" value="electronic">
+                        <label for="attendance4"><span id="label-attendance4" onclick="highlightSelected('attendance-group', 'label-attendance4')">전자출결</span></label>
+                        <input type="radio" name="attendance" id="attendance5" value="none">
+                        <label for="attendance5"><span id="label-attendance5" onclick="highlightSelected('attendance-group', 'label-attendance5')">반영안함</span></label>
+                    </div>
                 </div>
                 <div class="exams-group">
                     <label>시험은 몇 번 보나요?</label>
-                    <input type="radio" name="exams" id="exams1" value="4_or_more">
-                    <label for="exams1"><span id="label-exams1" onclick="highlightSelected('exams-group', 'label-exams1')">네 번 이상</span></label>
-                    <input type="radio" name="exams" id="exams2" value="3">
-                    <label for="exams2"><span id="label-exams2" onclick="highlightSelected('exams-group', 'label-exams2')">세 번</span></label>
-                    <input type="radio" name="exams" id="exams3" value="2">
-                    <label for="exams3"><span id="label-exams3" onclick="highlightSelected('exams-group', 'label-exams3')">두 번</span></label>
-                    <input type="radio" name="exams" id="exams4" value="1">
-                    <label for="exams4"><span id="label-exams4" onclick="highlightSelected('exams-group', 'label-exams4')">한 번</span></label>
-                    <input type="radio" name="exams" id="exams5" value="none">
-                    <label for="exams5"><span id="label-exams5" onclick="highlightSelected('exams-group', 'label-exams5')">없음</span></label>
+                    <div class="radio-options">
+                        <input type="radio" name="exams" id="exams1" value="4_or_more">
+                        <label for="exams1"><span id="label-exams1" onclick="highlightSelected('exams-group', 'label-exams1')">네 번 이상</span></label>
+                        <input type="radio" name="exams" id="exams2" value="3">
+                        <label for="exams2"><span id="label-exams2" onclick="highlightSelected('exams-group', 'label-exams2')">세 번</span></label>
+                        <input type="radio" name="exams" id="exams3" value="2">
+                        <label for="exams3"><span id="label-exams3" onclick="highlightSelected('exams-group', 'label-exams3')">두 번</span></label>
+                        <input type="radio" name="exams" id="exams4" value="1">
+                        <label for="exams4"><span id="label-exams4" onclick="highlightSelected('exams-group', 'label-exams4')">한 번</span></label>
+                        <input type="radio" name="exams" id="exams5" value="none">
+                        <label for="exams5"><span id="label-exams5" onclick="highlightSelected('exams-group', 'label-exams5')">없음</span></label>
+                    </div>
                 </div>
             </div>
             <button type="submit" class="submit-button">평가하기</button>

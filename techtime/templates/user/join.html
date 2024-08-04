@@ -22,16 +22,53 @@
             text-align: center;
             border: solid 1px rgba(219, 219, 219, 1);
             width: 300px;
-            height: 650px;
+            height: auto; /* 높이를 자동으로 조정하여 내용에 맞게 변경 */
             margin-top: 30px;
             background: white;
+            box-sizing: border-box;
         }
         .form-floating.mb-3 {
             margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .form-floating.mb-3 input {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            height: 30px;
+            box-sizing: border-box;
         }
         button {
             width: 100%;
             padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .form-floating.mb-3 label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 8px;
+            font-size: 14px;
+            color: gray;
+            pointer-events: none;
+            transition: 0.2s ease-in-out;
+        }
+        .form-floating.mb-3 input:focus + label,
+        .form-floating.mb-3 input:not(:placeholder-shown) + label {
+            top: -18px;
+            left: 0;
+            font-size: 12px;
+            color: #007bff;
+            background: white;
+            padding: 0 4px;
         }
     </style>
 </head>
@@ -46,32 +83,32 @@
             </div>
             <div id="error-message" style="color: red; display: none;"></div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" style="font-size: 14px; height: 24px" id="input_name" placeholder="이름">
-                <label for="input_name" style="font-size: 14px; padding: 4px 10px">이름</label>
+                <input type="text" id="input_name" placeholder=" " required>
+                <label for="input_name">이름</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" style="font-size: 14px; height: 24px" id="input_student_id" placeholder="학번">
-                <label for="input_student_id" style="font-size: 14px; padding: 4px 10px">학번</label>
+                <input type="text" id="input_student_id" placeholder=" " required>
+                <label for="input_student_id">학번</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" style="font-size: 14px; height: 24px" id="input_nickname" placeholder="닉네임">
-                <label for="input_nickname" style="font-size: 14px; padding: 4px 10px">닉네임</label>
+                <input type="text" id="input_nickname" placeholder=" " required>
+                <label for="input_nickname">닉네임</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="password" class="form-control" style="font-size: 14px; height: 24px" id="input_password" placeholder="비밀번호">
-                <label for="input_password" style="font-size: 14px; padding: 4px 10px">비밀번호</label>
+                <input type="password" id="input_password" placeholder=" " required>
+                <label for="input_password">비밀번호</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="email" class="form-control" style="font-size: 14px; height: 24px" id="input_email" placeholder="이메일 주소">
-                <label for="input_email" style="font-size: 14px; padding: 4px 10px">아이디(이메일)</label>
+                <input type="email" id="input_email" placeholder=" " required>
+                <label for="input_email">아이디(이메일)</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="tel" class="form-control" style="font-size: 14px; height: 24px" id="input_phone" placeholder="전화번호">
-                <label for="input_phone" style="font-size: 14px; padding: 4px 10px">전화번호</label>
+                <input type="tel" id="input_phone" placeholder=" " required>
+                <label for="input_phone">전화번호</label>
             </div>
             <!-- CSRF 토큰 추가 -->
             <input type="hidden" id="csrf_token" name="csrfmiddlewaretoken" value="{% csrf_token %}">
-            <button id="join_button" class="btn btn-primary">가입</button>
+            <button id="join_button">가입</button>
         </div>
         <div style="padding: 20px; text-align: center; border: solid 1px rgba(219, 219, 219, 1); width: 300px; height: 70px; margin-top: 30px; background: white">
             <div> 계정이 있으신가요? <a href="login">로그인</a></div>

@@ -22,6 +22,12 @@
             margin: 5px 0;
             color: #555;
         }
+        .post-item .content {
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Show only 2 lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
         .pagination {
             text-align: center;
             margin: 20px 0;
@@ -44,7 +50,7 @@
             {% for post in page_obj.object_list %}
             <div class="post-item">
                 <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
-                <p>{{ post.content }}</p>
+                <p class="content">{{ post.content }}</p>
                 <p>{{ post.created_at|date:"m/d H:i" }} | {{ post.is_anonymous|yesno:"익명,실명" }}</p>
             </div>
             {% endfor %}
