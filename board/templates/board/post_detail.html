@@ -73,20 +73,19 @@
             background-color: red;
         }
 
-        .login-button {
-            padding: 13px 10px;
-            text-decoration: none;
-            text-align: center;
-            position: relative;
-            font-weight: bold;
+        /* 링크 스타일을 새로운 요구사항에 맞게 수정 */
+        .list-group-item a {
             color: black;
-            border: 1px solid #ddd;
-            margin-right: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-decoration: none;
         }
 
+        .list-group-item a:hover {
+            color: blue;
+        }
+
+        .list-group-item a.clicked {
+            color: blue;
+        }
         .login-button:hover {
             color: red;
         }

@@ -161,15 +161,26 @@
         .average-rating {
             display: flex;align-items: center;
         }
-.average-rating .stars {
-    margin-left: 10px;
-    color: #ffa500;
-}
-.average-rating span {
-    margin-left: 10px;
-    color: #fff;
-}
+        .average-rating .stars {
+            margin-left: 10px;
+            color: #ffa500;
+        }
+        .average-rating span {
+            margin-left: 10px;
+            color: #fff;
+        }
 
+        /* CSS classes for different percentage widths */
+        .bar-10 { width: 10%; }
+        .bar-20 { width: 20%; }
+        .bar-30 { width: 30%; }
+        .bar-40 { width: 40%; }
+        .bar-50 { width: 50%; }
+        .bar-60 { width: 60%; }
+        .bar-70 { width: 70%; }
+        .bar-80 { width: 80%; }
+        .bar-90 { width: 90%; }
+        .bar-100 { width: 100%; }
     </style>
 </head>
 <body>
@@ -203,91 +214,91 @@
                 <div class="summary-item">
                     <span>과제:</span>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ homework_stats.none }}"></div>
+                        <div class="rating-bar {% if homework_percentages.none < 10 %}bar-10{% elif homework_percentages.none < 20 %}bar-20{% elif homework_percentages.none < 30 %}bar-30{% elif homework_percentages.none < 40 %}bar-40{% elif homework_percentages.none < 50 %}bar-50{% elif homework_percentages.none < 60 %}bar-60{% elif homework_percentages.none < 70 %}bar-70{% elif homework_percentages.none < 80 %}bar-80{% elif homework_percentages.none < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">없음: {{ homework_percentages.none|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ homework_stats.average }}"></div>
+                        <div class="rating-bar {% if homework_percentages.average < 10 %}bar-10{% elif homework_percentages.average < 20 %}bar-20{% elif homework_percentages.average < 30 %}bar-30{% elif homework_percentages.average < 40 %}bar-40{% elif homework_percentages.average < 50 %}bar-50{% elif homework_percentages.average < 60 %}bar-60{% elif homework_percentages.average < 70 %}bar-70{% elif homework_percentages.average < 80 %}bar-80{% elif homework_percentages.average < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">보통: {{ homework_percentages.average|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ homework_stats.many }}"></div>
+                        <div class="rating-bar {% if homework_percentages.many < 10 %}bar-10{% elif homework_percentages.many < 20 %}bar-20{% elif homework_percentages.many < 30 %}bar-30{% elif homework_percentages.many < 40 %}bar-40{% elif homework_percentages.many < 50 %}bar-50{% elif homework_percentages.many < 60 %}bar-60{% elif homework_percentages.many < 70 %}bar-70{% elif homework_percentages.many < 80 %}bar-80{% elif homework_percentages.many < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">많음: {{ homework_percentages.many|floatformat:0 }}%</div>
                     </div>
                 </div>
                 <div class="summary-item">
                     <span>조모임:</span>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ groupwork_stats.none }}"></div>
+                        <div class="rating-bar {% if groupwork_percentages.none < 10 %}bar-10{% elif groupwork_percentages.none < 20 %}bar-20{% elif groupwork_percentages.none < 30 %}bar-30{% elif groupwork_percentages.none < 40 %}bar-40{% elif groupwork_percentages.none < 50 %}bar-50{% elif groupwork_percentages.none < 60 %}bar-60{% elif groupwork_percentages.none < 70 %}bar-70{% elif groupwork_percentages.none < 80 %}bar-80{% elif groupwork_percentages.none < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">없음: {{ groupwork_percentages.none|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ groupwork_stats.average }}"></div>
+                        <div class="rating-bar {% if groupwork_percentages.average < 10 %}bar-10{% elif groupwork_percentages.average < 20 %}bar-20{% elif groupwork_percentages.average < 30 %}bar-30{% elif groupwork_percentages.average < 40 %}bar-40{% elif groupwork_percentages.average < 50 %}bar-50{% elif groupwork_percentages.average < 60 %}bar-60{% elif groupwork_percentages.average < 70 %}bar-70{% elif groupwork_percentages.average < 80 %}bar-80{% elif groupwork_percentages.average < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">보통: {{ groupwork_percentages.average|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ groupwork_stats.many }}"></div>
+                        <div class="rating-bar {% if groupwork_percentages.many < 10 %}bar-10{% elif groupwork_percentages.many < 20 %}bar-20{% elif groupwork_percentages.many < 30 %}bar-30{% elif groupwork_percentages.many < 40 %}bar-40{% elif groupwork_percentages.many < 50 %}bar-50{% elif groupwork_percentages.many < 60 %}bar-60{% elif groupwork_percentages.many < 70 %}bar-70{% elif groupwork_percentages.many < 80 %}bar-80{% elif groupwork_percentages.many < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">많음: {{ groupwork_percentages.many|floatformat:0 }}%</div>
                     </div>
                 </div>
                 <div class="summary-item">
                     <span>성적:</span>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ grading_stats.generous }}"></div>
+                        <div class="rating-bar {% if grading_percentages.generous < 10 %}bar-10{% elif grading_percentages.generous < 20 %}bar-20{% elif grading_percentages.generous < 30 %}bar-30{% elif grading_percentages.generous < 40 %}bar-40{% elif grading_percentages.generous < 50 %}bar-50{% elif grading_percentages.generous < 60 %}bar-60{% elif grading_percentages.generous < 70 %}bar-70{% elif grading_percentages.generous < 80 %}bar-80{% elif grading_percentages.generous < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">너그러움: {{ grading_percentages.generous|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ grading_stats.average }}"></div>
+                        <div class="rating-bar {% if grading_percentages.average < 10 %}bar-10{% elif grading_percentages.average < 20 %}bar-20{% elif grading_percentages.average < 30 %}bar-30{% elif grading_percentages.average < 40 %}bar-40{% elif grading_percentages.average < 50 %}bar-50{% elif grading_percentages.average < 60 %}bar-60{% elif grading_percentages.average < 70 %}bar-70{% elif grading_percentages.average < 80 %}bar-80{% elif grading_percentages.average < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">보통: {{ grading_percentages.average|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ grading_stats.strict }}"></div>
+                        <div class="rating-bar {% if grading_percentages.strict < 10 %}bar-10{% elif grading_percentages.strict < 20 %}bar-20{% elif grading_percentages.strict < 30 %}bar-30{% elif grading_percentages.strict < 40 %}bar-40{% elif grading_percentages.strict < 50 %}bar-50{% elif grading_percentages.strict < 60 %}bar-60{% elif grading_percentages.strict < 70 %}bar-70{% elif grading_percentages.strict < 80 %}bar-80{% elif grading_percentages.strict < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">깐깐함: {{ grading_percentages.strict|floatformat:0 }}%</div>
                     </div>
                 </div>
                 <div class="summary-item">
                     <span>출석:</span>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ attendance_stats.complex }}"></div>
+                        <div class="rating-bar {% if attendance_percentages.complex < 10 %}bar-10{% elif attendance_percentages.complex < 20 %}bar-20{% elif attendance_percentages.complex < 30 %}bar-30{% elif attendance_percentages.complex < 40 %}bar-40{% elif attendance_percentages.complex < 50 %}bar-50{% elif attendance_percentages.complex < 60 %}bar-60{% elif attendance_percentages.complex < 70 %}bar-70{% elif attendance_percentages.complex < 80 %}bar-80{% elif attendance_percentages.complex < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">복합적: {{ attendance_percentages.complex|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ attendance_stats.direct }}"></div>
+                        <div class="rating-bar {% if attendance_percentages.direct < 10 %}bar-10{% elif attendance_percentages.direct < 20 %}bar-20{% elif attendance_percentages.direct < 30 %}bar-30{% elif attendance_percentages.direct < 40 %}bar-40{% elif attendance_percentages.direct < 50 %}bar-50{% elif attendance_percentages.direct < 60 %}bar-60{% elif attendance_percentages.direct < 70 %}bar-70{% elif attendance_percentages.direct < 80 %}bar-80{% elif attendance_percentages.direct < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">직접호명: {{ attendance_percentages.direct|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ attendance_stats.designated }}"></div>
+                        <div class="rating-bar {% if attendance_percentages.designated < 10 %}bar-10{% elif attendance_percentages.designated < 20 %}bar-20{% elif attendance_percentages.designated < 30 %}bar-30{% elif attendance_percentages.designated < 40 %}bar-40{% elif attendance_percentages.designated < 50 %}bar-50{% elif attendance_percentages.designated < 60 %}bar-60{% elif attendance_percentages.designated < 70 %}bar-70{% elif attendance_percentages.designated < 80 %}bar-80{% elif attendance_percentages.designated < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">지정좌석: {{ attendance_percentages.designated|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ attendance_stats.electronic }}"></div>
+                        <div class="rating-bar {% if attendance_percentages.electronic < 10 %}bar-10{% elif attendance_percentages.electronic < 20 %}bar-20{% elif attendance_percentages.electronic < 30 %}bar-30{% elif attendance_percentages.electronic < 40 %}bar-40{% elif attendance_percentages.electronic < 50 %}bar-50{% elif attendance_percentages.electronic < 60 %}bar-60{% elif attendance_percentages.electronic < 70 %}bar-70{% elif attendance_percentages.electronic < 80 %}bar-80{% elif attendance_percentages.electronic < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">전자출결: {{ attendance_percentages.electronic|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ attendance_stats.none }}"></div>
+                        <div class="rating-bar {% if attendance_percentages.none < 10 %}bar-10{% elif attendance_percentages.none < 20 %}bar-20{% elif attendance_percentages.none < 30 %}bar-30{% elif attendance_percentages.none < 40 %}bar-40{% elif attendance_percentages.none < 50 %}bar-50{% elif attendance_percentages.none < 60 %}bar-60{% elif attendance_percentages.none < 70 %}bar-70{% elif attendance_percentages.none < 80 %}bar-80{% elif attendance_percentages.none < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">반영안함: {{ attendance_percentages.none|floatformat:0 }}%</div>
                     </div>
                 </div>
                 <div class="summary-item">
                     <span>시험:</span>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ exams_stats.4_or_more }}"></div>
+                        <div class="rating-bar {% if exams_percentages.4_or_more < 10 %}bar-10{% elif exams_percentages.4_or_more < 20 %}bar-20{% elif exams_percentages.4_or_more < 30 %}bar-30{% elif exams_percentages.4_or_more < 40 %}bar-40{% elif exams_percentages.4_or_more < 50 %}bar-50{% elif exams_percentages.4_or_more < 60 %}bar-60{% elif exams_percentages.4_or_more < 70 %}bar-70{% elif exams_percentages.4_or_more < 80 %}bar-80{% elif exams_percentages.4_or_more < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">네 번 이상: {{ exams_percentages.4_or_more|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ exams_stats.3 }}"></div>
+                        <div class="rating-bar {% if exams_percentages.3 < 10 %}bar-10{% elif exams_percentages.3 < 20 %}bar-20{% elif exams_percentages.3 < 30 %}bar-30{% elif exams_percentages.3 < 40 %}bar-40{% elif exams_percentages.3 < 50 %}bar-50{% elif exams_percentages.3 < 60 %}bar-60{% elif exams_percentages.3 < 70 %}bar-70{% elif exams_percentages.3 < 80 %}bar-80{% elif exams_percentages.3 < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">세 번: {{ exams_percentages.3|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ exams_stats.2 }}"></div>
+                        <div class="rating-bar {% if exams_percentages.2 < 10 %}bar-10{% elif exams_percentages.2 < 20 %}bar-20{% elif exams_percentages.2 < 30 %}bar-30{% elif exams_percentages.2 < 40 %}bar-40{% elif exams_percentages.2 < 50 %}bar-50{% elif exams_percentages.2 < 60 %}bar-60{% elif exams_percentages.2 < 70 %}bar-70{% elif exams_percentages.2 < 80 %}bar-80{% elif exams_percentages.2 < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">두 번: {{ exams_percentages.2|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ exams_stats.1 }}"></div>
+                        <div class="rating-bar {% if exams_percentages.1 < 10 %}bar-10{% elif exams_percentages.1 < 20 %}bar-20{% elif exams_percentages.1 < 30 %}bar-30{% elif exams_percentages.1 < 40 %}bar-40{% elif exams_percentages.1 < 50 %}bar-50{% elif exams_percentages.1 < 60 %}bar-60{% elif exams_percentages.1 < 70 %}bar-70{% elif exams_percentages.1 < 80 %}bar-80{% elif exams_percentages.1 < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">한 번: {{ exams_percentages.1|floatformat:0 }}%</div>
                     </div>
                     <div class="rating-summary">
-                        <div class="rating-bar {{ exams_stats.none }}"></div>
+                        <div class="rating-bar {% if exams_percentages.none < 10 %}bar-10{% elif exams_percentages.none < 20 %}bar-20{% elif exams_percentages.none < 30 %}bar-30{% elif exams_percentages.none < 40 %}bar-40{% elif exams_percentages.none < 50 %}bar-50{% elif exams_percentages.none < 60 %}bar-60{% elif exams_percentages.none < 70 %}bar-70{% elif exams_percentages.none < 80 %}bar-80{% elif exams_percentages.none < 90 %}bar-90{% else %}bar-100{% endif %}"></div>
                         <div class="rating-percentage">없음: {{ exams_percentages.none|floatformat:0 }}%</div>
                     </div>
                 </div>
@@ -304,6 +315,5 @@
             </div>
         </div>
     </div>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>

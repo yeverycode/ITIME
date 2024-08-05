@@ -2,6 +2,15 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 
+class Lecture(models.Model):
+    course_name = models.CharField(max_length=100)
+    course_code = models.CharField(max_length=20)
+    credits = models.IntegerField()
+    summary = models.TextField()
+
+    def __str__(self):
+        return self.course_name
+
 class Feed(models.Model):
     content = models.TextField()  # 글내용
     email = models.EmailField(default='')  # 글쓴이

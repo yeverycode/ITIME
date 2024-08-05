@@ -281,3 +281,63 @@ def post_detail(request, post_id):
     comments = post.comments.filter(parent__isnull=True)
     form = CommentForm()
     return render(request, 'board/post_detail.html', {'post': post, 'comments': comments, 'form': form})
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import Lecture, LectureReview
+
+
+def lecture_detail(request, lecture_id):
+    lecture = get_object_or_404(Lecture, id=lecture_id)
+    reviews = LectureReview.objects.filter(lecture=lecture)
+
+    total_reviews = reviews.count()
+
+    def calculate_percentage(count):
+        return (count / total_reviews) * 100 if total_reviews > 0 else 0
+
+    homework_stats = {
+        'none': calculate_percentage(reviews.filter(homework='none').count()),
+        'average': calculate_percentage(reviews.filter(homework='average').count()),
+        'many': calculate_percentage(reviews.filter(homework='many').count())
+    }
+
+    groupwork_stats = {
+        'none': calculate_percentage(reviews.filter(groupwork='none').count()),
+        'average': calculate_percentage(reviews.filter(groupwork='average').count()),
+        'many': calculate_percentage(reviews.filter(groupwork='many').count())
+    }
+
+    grading_stats = {
+        'generous': calculate_percentage(reviews.filter(grading='generous').count()),
+        'average': calculate_percentage(reviews.filter(grading='average').count()),
+        'strict': calculate_percentage(reviews.filter(grading='strict').count())
+    }
+
+    attendance_stats = {
+        'complex': calculate_percentage(reviews.filter(attendance='complex').count()),
+        'direct': calculate_percentage(reviews.filter(attendance='direct').count()),
+        'designated': calculate_percentage(reviews.filter(attendance='designated').count()),
+        'electronic': calculate_percentage(reviews.filter(attendance='electronic').count()),
+        'none': calculate_percentage(reviews.filter(attendance='none').count())
+    }
+
+    exams_stats = {
+        '4_or_more': calculate_percentage(reviews.filter(exams='4_or_more').count()),
+        '3': calculate_percentage(reviews.filter(exams='3').count()),
+        '2': calculate_percentage(reviews.filter(exams='2').count()),
+        '1': calculate_percentage(reviews.filter(exams='1').count()),
+        'none': calculate_percentage(reviews.filter(exams='none').count())
+    }
+
+    context = {
+        'lecture': lecture,
+        'reviews': reviews,
+        'homework_percentages': homework_stats,
+        'groupwork_percentages': groupwork_stats,
+        'grading_percentages': grading_stats,
+        'attendance_percentages': attendance_stats,
+        'exams_percentages': exams_stats,
+    }
+
+    return render(request, 'lecture_detail.html', context)
