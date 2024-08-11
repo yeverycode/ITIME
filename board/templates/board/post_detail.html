@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,6 +85,7 @@
         .list-group-item a.clicked {
             color: blue;
         }
+
         .login-button:hover {
             color: red;
         }
@@ -135,6 +135,10 @@
             padding: 20px;
             border-radius: 5px;
             margin-bottom: 20px;
+        }
+
+        .post-content p {
+            white-space: pre-wrap;
         }
 
         .post-interactions {
@@ -244,9 +248,15 @@
                 <div class="text-muted mb-3">{{ post.created_at }} | {% if post.is_anonymous %}익명{% else %}{{ post.user.profile.nickname }}{% endif %}</div>
                 <p>{{ post.content }}</p>
                 {% if post.file %}
+                {% if post.file.name|lower|slice:"-4:" == ".jpg" or post.file.name|lower|slice:"-5:" == ".jpeg" or post.file.name|lower|slice:"-4:" == ".png" or post.file.name|lower|slice:"-4:" == ".gif" %}
+                <div class="mt-3">
+                    <img src="{{ post.file.url }}" alt="이미지" style="max-width: 100%; height: auto;">
+                </div>
+                {% else %}
                 <div class="mt-3">
                     <a href="{{ post.file.url }}" download>{{ post.file.name }}</a>
                 </div>
+                {% endif %}
                 {% endif %}
                 <div class="post-interactions">
                     <div class="btn-group">
@@ -373,5 +383,4 @@
         });
     </script>
 </body>
-
 </html>

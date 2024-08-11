@@ -11,6 +11,10 @@
             width: 60%;
             margin: 0 auto;
         }
+        .post-title a {
+            text-decoration: none;
+            color: inherit;
+        }
         .comment-item {
             border-bottom: 1px solid #ccc;
             padding: 10px 0;
@@ -45,7 +49,7 @@
             <div class="comment-item">
                 <p><strong>댓글 작성일:</strong> {{ comment.created_at }}</p>
                 {% if comment.post and comment.post.id %}
-                    <h3><strong>게시물 제목:</strong> <a href="{% url 'post_detail' comment.post.id %}">{{ comment.post.title }}</a></h3>
+                    <h3 class="post-title"><strong>게시물 제목:</strong> <a href="{% url 'post_detail' comment.post.id %}">{{ comment.post.title }}</a></h3>
                 {% else %}
                     <h3><strong>게시물 제목:</strong> [삭제된 게시물]</h3>
                 {% endif %}
